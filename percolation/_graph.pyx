@@ -1,14 +1,27 @@
 import numpy as np
 cimport numpy as cnp
-
 import networkx as nx
 
-# Numpy structured dtype representing an edge of a graph
-# A graph is represented as an ordered list of edges
+
 edge_dtype = np.dtype([
     ("first_node", np.int64),
     ("second_node", np.int64),
     ("distance", np.float64)
 ]) 
 
-cpdef cnp.ndarray[edge_t, ndim= 1; mode='c'] networkx_to_list()
+cdef edge_t[:] transform_graph(G):
+
+    cdef int size = G.number_of_edges()
+    cdef edge_t[:] edge_array = np.zeros(size, dtype=edge_dtype)
+    
+    cdef int i = 0
+    for u, v, data in G.edges(data=True):
+        edge_array[i].first_node = u
+        edge_array[i].second_node = v
+        edge_array[i].distance = data["length"]
+    return edge_array
+
+
+
+
+

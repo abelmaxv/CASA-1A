@@ -3,7 +3,7 @@ import numpy as np
 
 
 
-cpdef cnp.ndarray[HIERARCHY_t, ndim=1, mode="c"] percolation(const edge_t[:] graph):
+cdef cnp.ndarray[HIERARCHY_t, ndim=1, mode="c"] percolation_on_graph(edge_t[] graph):
     """ Computes the percolation tree
     
     Parameters

@@ -6,15 +6,16 @@ cdef class UnionFind(object):
         self.size = np.hstack((np.ones(N, dtype=np.intp),
                                np.zeros(N - 1, dtype=np.intp)))
 
-    cdef void union(self, intp_t m, intp_t n) noexcept:
+    cdef void union(self, intp_t m, intp_t n):
         self.parent[m] = self.next_label
         self.parent[n] = self.next_label
         self.size[self.next_label] = self.size[m] + self.size[n]
         self.next_label += 1
         return
 
-    @cython.wraparound(True)
-    cdef intp_t fast_find(self, intp_t n) noexcept:
+    #Allow negarive indices
+    @cython.wraparound(True) 
+    cdef intp_t fast_find(self, intp_t n):
         cdef intp_t p
         p = n
         # find the highest node in the linkage graph so far
