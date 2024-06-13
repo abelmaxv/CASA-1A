@@ -1,4 +1,10 @@
+import numpy as np
+cimport numpy as np
+
 ctypedef packed struct edge_t :
     long first_node
     long second_node
-    double distance
+    float distance
+    
+
+cdef edge_t[:] transform_graph(G)

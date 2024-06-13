@@ -1,20 +1,29 @@
+import numpy as np
+cimport numpy as np
 
-cdef _tree.HIERARCHY_t[:] percolation_on_graph(_graph.edge_t[:] graph):
+from _union_find cimport UnionFind
+from _tree cimport HIERARCHY_t
+from _tree import HIERARCHY_dtype
+from _graph cimport edge_t, transform_graph
 
+cdef HIERARCHY_t[:] percolate_edge_list(edge_t[:] edge_list, int n_nodes):
+    """ Computes the percolation algorithm on the edge list of a given graph
+    """
     cdef : 
-        int n_samples = graph.shape[0] + 1
-        _tree.HIERARCHY_t[:] hierarchical_tree = np.zeros(n_samples, dtype=_tree.HIERARCHY_dtype)
-        int current_node_cluster, next_node_cluster
-        int current_node, next_node, i
+        int n_samples = len(edge_list)
+        HIERARCHY_t[:] hierarchical_tree = np.zeros(n_samples, dtype=HIERARCHY_dtype)
+        long current_node_cluster, next_node_cluster
+        long current_node, next_node 
+        int i
         float distance
-        UnionFind U = UnionFind(n_samples)
-        
+        UnionFind U = UnionFind(n_nodes)
 
-    for i in range(n_samples - 1):
 
-        current_node = graph[i].first_node
-        next_node = graph[i].second_node
-        distance = graph[i].distance
+    for i in range(n_samples):
+
+        current_node = edge_list[i].first_node
+        next_node = edge_list[i].second_node
+        distance = edge_list[i].distance
 
         current_node_cluster = U.fast_find(current_node)
         next_node_cluster = U.fast_find(next_node)
@@ -30,3 +39,13 @@ cdef _tree.HIERARCHY_t[:] percolation_on_graph(_graph.edge_t[:] graph):
 
 
 
+
+cpdef np.ndarray[HIERARCHY_t, ndim=1] percolate_network(G):
+    
+    cdef int number_of_nodes = G.number_of_nodes()
+    cdef edge_t[:] edge_list = transform_graph(G)
+    print("Graph transformed")
+    #SORT EDGES 
+    cdef HIERARCHY_t[:] percolation_tree = percolate_edge_list(edge_list, number_of_nodes)
+
+    return np.asarray(percolation_tree, dtype = HIERARCHY_dtype)

@@ -1,12 +1,17 @@
+import numpy as np
+cimport numpy as np
+
+cimport cython
+
 cdef class UnionFind(object):
 
     def __init__(self, N):
-        self.parent = np.full(2 * N - 1, -1., dtype=np.intp, order='C')
+        self.parent = np.full(2 * N - 1, -1., dtype=np.int_, order='C')
         self.next_label = N
-        self.size = np.hstack((np.ones(N, dtype=np.intp),
-                               np.zeros(N - 1, dtype=np.intp)))
+        self.size = np.hstack((np.ones(N, dtype=np.int_),
+                               np.zeros(N - 1, dtype=np.int_)))
 
-    cdef void union(self, int m, int n):
+    cdef void union(self, long m, long n):
         self.parent[m] = self.next_label
         self.parent[n] = self.next_label
         self.size[self.next_label] = self.size[m] + self.size[n]
@@ -14,8 +19,9 @@ cdef class UnionFind(object):
         return
 
     #Allow negative indices
-    cdef int fast_find(self, int n):
-        cdef int p
+    @cython.wraparound(True)
+    cdef long fast_find(self, long n):
+        cdef long p
         p = n
         # find the highest node in the linkage graph so far
         while self.parent[n] != -1:

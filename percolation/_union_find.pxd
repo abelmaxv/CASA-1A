@@ -4,9 +4,9 @@ cimport numpy as np
 cimport cython
 
 cdef class UnionFind:
-    cdef int next_label
-    cdef int[:] parent
-    cdef int[:] size
+    cdef long next_label
+    cdef long[:] parent
+    cdef long[:] size
 
-    cdef void union(self, int m, int n) 
-    cdef int fast_find(self, int n)
+    cdef void union(self, long m, long n) 
+    cdef long fast_find(self, long n)
