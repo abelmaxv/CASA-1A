@@ -1,27 +1,14 @@
-cdef np.ndarray[HIERARCHY_t, ndim=1, mode="c"] percolation_on_graph(edge_t[:] graph):
-    """ Computes the percolation tree
-    
-    Parameters
-    ----------
-    graph : ndarray of shape (n_samples -1), dtype= edge_dtype
-            The representation of a graph is a collection of 
-            edges.
 
-    Returns
-    -------
-    hierarchical_tree : nd array of shape (n_samples - 1 ), dtype = HIERARCHY_dtype
+cdef _tree.HIERARCHY_t[:] percolation_on_graph(_graph.edge_t[:] graph):
 
-    """
     cdef : 
-        cnp.ndarray[HIERARCHY_t, ndim=1, mode="c"] hierarchical_tree
         int n_samples = graph.shape[0] + 1
+        _tree.HIERARCHY_t[:] hierarchical_tree = np.zeros(n_samples, dtype=_tree.HIERARCHY_dtype)
         int current_node_cluster, next_node_cluster
         int current_node, next_node, i
         float distance
         UnionFind U = UnionFind(n_samples)
-
-
-    hierarchical_tree = np.zeros(n_samples-1, dtype=HIERARCHY_dtype)
+        
 
     for i in range(n_samples - 1):
 
