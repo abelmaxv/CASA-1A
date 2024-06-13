@@ -13,7 +13,8 @@ extensions = [
               include_dirs=[numpy_path]),
     Extension("_tree", ["_tree.pyx"],
               include_dirs=[numpy_path]),
-
+    Extension("_hash", ["_hash.pyx"],
+              include_dirs=[numpy_path]),
     Extension("_percolation", ["_percolation.pyx"],
               include_dirs=[numpy_path],
               depends= ["_union_find.pyx", "_tree.pyx", "_graph.pyx"])
