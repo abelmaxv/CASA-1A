@@ -1,5 +1,5 @@
 import numpy as np
-cimport numpy as cnp
+cimport numpy as np
 import networkx as nx
 
 

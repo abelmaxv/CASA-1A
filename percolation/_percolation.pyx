@@ -1,9 +1,4 @@
-cimport numpy as cnp
-import numpy as np
-
-
-
-cdef cnp.ndarray[HIERARCHY_t, ndim=1, mode="c"] percolation_on_graph(edge_t[] graph):
+cdef np.ndarray[HIERARCHY_t, ndim=1, mode="c"] percolation_on_graph(edge_t[:] graph):
     """ Computes the percolation tree
     
     Parameters
@@ -19,10 +14,10 @@ cdef cnp.ndarray[HIERARCHY_t, ndim=1, mode="c"] percolation_on_graph(edge_t[] gr
     """
     cdef : 
         cnp.ndarray[HIERARCHY_t, ndim=1, mode="c"] hierarchical_tree
-        int64_t n_samples = graph.shape[0] + 1
-        intp_t current_node_cluster, next_node_cluster
-        int64_t current_node, next_node, i
-        float64_t distance
+        int n_samples = graph.shape[0] + 1
+        int current_node_cluster, next_node_cluster
+        int current_node, next_node, i
+        float distance
         UnionFind U = UnionFind(n_samples)
 
 

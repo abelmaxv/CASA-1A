@@ -1,7 +1,12 @@
-cdef class UnionFind:
-    cdef intp_t next_label
-    cdef intp_t[:] parent
-    cdef intp_t[:] size
+import numpy as np
+cimport numpy as np
 
-    cdef void union(self, intp_t m, intp_t n) 
-    cdef intp_t fast_find(self, intp_t n)
+cimport cython
+
+cdef class UnionFind:
+    cdef int next_label
+    cdef int[:] parent
+    cdef int[:] size
+
+    cdef void union(self, int m, int n) 
+    cdef int fast_find(self, int n)
