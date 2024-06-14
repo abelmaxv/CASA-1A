@@ -17,3 +17,4 @@ G = ox.graph_from_place("Meudon, France", network_type = "drive", simplify = Tru
 clusterer = Percolation(G)
 
 clusterer.percolate()
+print(clusterer.percolation_tree)

@@ -8,12 +8,12 @@ edge_dtype = np.dtype([
     ("distance", np.single)
 ]) 
 
-cdef edge_t[:] transform_graph(G):
+cdef edge_t[::1] transform_graph(G):
     """ Transforms a Networkx multidigraph provided by osmnx into 
     an edge_t 
     """
     cdef int number_of_edges = G.number_of_edges()
-    cdef edge_t[:] edge_array = np.zeros(number_of_edges, dtype=edge_dtype)
+    cdef edge_t[::1] edge_array = np.zeros(number_of_edges, dtype=edge_dtype)
     cdef int i = 0
 
     for u, v, data in G.edges(data=True):
