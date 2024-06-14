@@ -3,7 +3,7 @@ cimport numpy as np
 
 cimport cython
 
-cdef class UnionFind (object):
+cdef class UnionFind(object):
 
     def __init__(self, N):
         self.parent_arr = -1 * np.ones(2 * N - 1, dtype=np.int_, order='C')

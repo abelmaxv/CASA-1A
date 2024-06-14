@@ -2,6 +2,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from percolation import Percolation
+import matplotlib.pyplot as plt
 
 #G = ox.graph_from_place("Meudon, France", network_type = "drive", simplify = True)
 
@@ -27,4 +28,7 @@ G.add_edge(2, 0, length=2.5)
 clusterer = Percolation(G)
 
 clusterer.percolate()
-print(clusterer.percolation_tree)
+print('ok1')
+print(clusterer._linkage_tree)
+clusterer.linkage_tree.plot()
+plt.show()

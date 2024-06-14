@@ -5,5 +5,6 @@ from _tree cimport HIERARCHY_t
 from _graph cimport edge_t
 
 
-cdef HIERARCHY_t[:] percolate_edge_list(edge_t[::1] edge_list, int n_nodes)
-cpdef np.ndarray[HIERARCHY_t, ndim=1] percolate_network(G)
+cdef np.ndarray[dtype = double, ndim=2] clean_linkage_matrix(np.ndarray[dtype = double, ndim=2] linkage_matrix)
+cdef np.ndarray[ndim=2, dtype = double] percolate_edge_list(edge_t[::1] edge_list, int n_nodes)
+cpdef np.ndarray[dtype = double, ndim=2] percolate_network(G, char clean)
