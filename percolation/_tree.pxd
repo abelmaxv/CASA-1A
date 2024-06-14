@@ -1,10 +1,8 @@
 import numpy as np
 cimport numpy as np
+from _union_find cimport UnionFind
 
-ctypedef packed struct HIERARCHY_t : 
-    long left_node
-    long right_node
-    float value 
-    int cluster_size
+
+cpdef _label_of_cut(np.ndarray[dtype = double, ndim = 2] linkage_matrix, double threshold)
 
 

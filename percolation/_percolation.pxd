@@ -1,7 +1,6 @@
 cimport numpy as np
 
 from _union_find cimport UnionFind
-from _tree cimport HIERARCHY_t
 from _graph cimport edge_t
 
 

@@ -1,4 +1,5 @@
 from scipy.cluster.hierarchy import dendrogram
+from _tree import _label_of_cut
 
 class LinkageTree(object):
 
@@ -7,4 +8,11 @@ class LinkageTree(object):
 
     
     def plot(self):
+        # TO DO : 
+        #   improve visual 
+        #   truncature option
+
         dendrogram_data = dendrogram(self._linkage_matrix)
+    
+    def label_of_cut(self, threshold):
+        return _label_of_cut(self._linkage_matrix, threshold)

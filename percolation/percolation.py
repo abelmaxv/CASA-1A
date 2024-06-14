@@ -7,6 +7,10 @@ from linkage_tree import LinkageTree
 class Percolation: 
     
     def __init__(self, G, formated_label = False, compute_mst = False): 
+
+        # TO DO :
+        #   include the mst option
+
         
         # The needed format for the network nodes name is ordered integers
         # May find something better than storing the whole graph ?

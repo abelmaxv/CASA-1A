@@ -2,8 +2,6 @@ import numpy as np
 cimport numpy as np
 
 from _union_find cimport UnionFind
-from _tree cimport HIERARCHY_t
-from _tree import HIERARCHY_dtype
 from _graph cimport edge_t, transform_graph
 from _graph import edge_dtype
 
