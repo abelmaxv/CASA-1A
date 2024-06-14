@@ -12,7 +12,6 @@ class Percolation:
             self.network = G
         else :
             self.network =  nx.convert_node_labels_to_integers(G)
-
         self.percolation_tree = None 
 
     def percolate(self):

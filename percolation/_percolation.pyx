@@ -20,7 +20,7 @@ cdef HIERARCHY_t[:] percolate_edge_list(edge_t[:] edge_list, int n_nodes):
 
 
     for i in range(n_samples):
-
+        print(str(i)+'/'+str(n_samples))
         current_node = edge_list[i].first_node
         next_node = edge_list[i].second_node
         distance = edge_list[i].distance
@@ -31,7 +31,7 @@ cdef HIERARCHY_t[:] percolate_edge_list(edge_t[:] edge_list, int n_nodes):
         hierarchical_tree[i].left_node = current_node_cluster
         hierarchical_tree[i].right_node = next_node_cluster
         hierarchical_tree[i].value = distance
-        hierarchical_tree[i].cluster_size = U.size[current_node_cluster] + U.size[next_node_cluster]
+        hierarchical_tree[i].cluster_size = U.size(current_node_cluster) + U.size(next_node_cluster)
 
         U.union(current_node_cluster, next_node_cluster)
 
@@ -47,5 +47,5 @@ cpdef np.ndarray[HIERARCHY_t, ndim=1] percolate_network(G):
     print("Graph transformed")
     #SORT EDGES 
     cdef HIERARCHY_t[:] percolation_tree = percolate_edge_list(edge_list, number_of_nodes)
-
+    print("Percolation computed")
     return np.asarray(percolation_tree, dtype = HIERARCHY_dtype)
