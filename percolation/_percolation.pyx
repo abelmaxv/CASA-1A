@@ -21,6 +21,14 @@ cdef HIERARCHY_t[:] percolate_edge_list(edge_t[::1] edge_list, int n_nodes):
 
 
     for i in range(n_samples):
+
+        print("Hierarchical structure:")
+        print(np.asarray(hierarchical_tree, dtype = HIERARCHY_dtype))
+        print("Parents :")
+        print(np.asarray(U.parent_arr))
+        print("Sizes:")
+        print(np.asarray(U.size_arr))
+
         current_node = edge_list[i].first_node
         next_node = edge_list[i].second_node
         distance = edge_list[i].distance
@@ -31,8 +39,7 @@ cdef HIERARCHY_t[:] percolate_edge_list(edge_t[::1] edge_list, int n_nodes):
         hierarchical_tree[i].left_node = current_node_cluster
         hierarchical_tree[i].right_node = next_node_cluster
         hierarchical_tree[i].value = distance
-        hierarchical_tree[i].cluster_size = U.size(current_node_cluster) + U.size(next_node_cluster)
-
+        hierarchical_tree[i].cluster_size = U.size_arr[current_node_cluster] + U.size_arr[next_node_cluster]
         U.union(current_node_cluster, next_node_cluster)
 
     return hierarchical_tree

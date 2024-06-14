@@ -3,34 +3,30 @@ cimport numpy as np
 
 cimport cython
 
-cdef class UnionFind(object):
+cdef class UnionFind (object):
 
     def __init__(self, N):
-        self.parent = np.array(list(range(N)), dtype = np.int_)
-        self._size = np.ones(N, dtype=np.intc)
-
-    #Allow negative indices
-    @cython.wraparound(True)
-    cdef long fast_find(self, long n):
-        cdef long p
-        p = n
-        # find the highest node in the linkage graph so far
-        while self.parent[n] != n:
-            n = self.parent[n]
-        # provide a shortcut up to the highest node
-        while self.parent[p] != n:
-            p, self.parent[p] = self.parent[p], n
-        return n
-
-    cdef int size(self, long n):
-        return self._size[self.fast_find(n)]
+        self.parent_arr = -1 * np.ones(2 * N - 1, dtype=np.int_, order='C')
+        self.next_label = N
+        self.size_arr = np.hstack((np.ones(N, dtype=np.intc),
+                                   np.zeros(N-1, dtype=np.intc)))
 
 
     cdef void union(self, long m, long n):
-        pn = self.fast_find(n)
-        pm = self.fast_find(m)
-        if self._size[pn] < self._size[pm]:
-            pn, pm = pm, pn
-        self.parent[pm] = pn
-        self._size[pn] = self._size[pn] + self._size[pm]
+        if n != m :
+            self.size_arr[self.next_label] = self.size_arr[m] + self.size_arr[n]
+            self.parent_arr[m] = self.next_label
+            self.parent_arr[n] = self.next_label
+            self.next_label += 1
         return
+
+    cdef long fast_find(self, long n):
+        #cdef long p
+        #p = n
+        while self.parent_arr[n] != -1:
+            n = self.parent_arr[n]
+        # label up to the root
+        #while self.parent_arr[p] != n:
+            #self.parent_arr[p]=n
+            #p = self.parent_arr[p]
+        return n
