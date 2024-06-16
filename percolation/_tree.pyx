@@ -20,8 +20,7 @@ def extract_from_union_find(UnionFind U, int n_nodes):
 
 
 
-
-cpdef _label_of_cut(np.ndarray[dtype = double, ndim = 2] linkage_matrix, double threshold): 
+cpdef np.ndarray[dtype = long, ndim = 1] _label_of_cut(np.ndarray[dtype = double, ndim = 2] linkage_matrix, double threshold): 
     """ Extracts the cluster from the linkage tree at a given threshold.
         Computes percolation until threshold is reached.
     """
@@ -33,6 +32,7 @@ cpdef _label_of_cut(np.ndarray[dtype = double, ndim = 2] linkage_matrix, double 
         int i = 0
         double distance
         UnionFind U = UnionFind(n_nodes)
+        np.ndarray[dtype = long, ndim = 1] result = np.zeros(n_nodes, dtype = long) 
         
 
     while threshold > linkage_matrix[i,2] and i < linkage_matrix.shape[0]  :
@@ -46,6 +46,7 @@ cpdef _label_of_cut(np.ndarray[dtype = double, ndim = 2] linkage_matrix, double 
         U.union(current_node_cluster, next_node_cluster)
         i+=1
 
-    clusters = extract_from_union_find(U, n_nodes)
+    for i in range(n_nodes):
+        result[i] = U.fast_find(i)
 
-    return clusters
+    return result

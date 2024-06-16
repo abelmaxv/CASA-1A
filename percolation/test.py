@@ -3,11 +3,11 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from percolation import Percolation
 import matplotlib.pyplot as plt
-from osmnx import graph_from_place 
+import osmnx as ox
 
-G = graph_from_place("Meudon, France", network_type = "drive", simplify = True)
+G = ox.graph_from_place("Meudon, France", network_type = "drive", simplify = True)
 G = nx.convert_node_labels_to_integers(G)
-pos = 
+
 
 # Create a new multidigraph
 #G = nx.MultiDiGraph()
@@ -32,16 +32,21 @@ clusterer = Percolation(G)
 
 clusterer.percolate()
 
-clusters = clusterer.linkage_tree.label_of_cut(100)
 
-cls = [i/len(clusters) for i in range(len(clusters))]
-i=0
-while i<5:
-    nx.draw_networkx_nodes(G, 
-                           pos=pos,
-                           node_color=cls[i],
-                           node_size=4,
-                           ax=ax, 
-                           nodelist= list(communities_fg[i])
-                          )
-    i+=1
+clusters = clusterer.linkage_tree.label_of_cut(150)
+clusters.add_clusters_to_graph(G)
+
+
+
+
+
+print(clusters.tab)
+
+cls = ox.plot.get_node_colors_by_attr(G, 'cluster', cmap='tab20')
+
+fig, ax = plt.subplots(figsize=(12,7))
+
+fig, ax = ox.plot_graph(G, 
+                        node_color=cls,
+                        node_size = 25,
+                        ax=ax)
