@@ -1,7 +1,7 @@
 import networkx as nx
 import numpy as np
 from ._percolation import percolate_network
-from ..src.linkage_tree import LinkageTree
+from src.linkage_tree import LinkageTree
 
 def _checks_format(G):
     """ Checks if the graph given as the right format for the library : 
@@ -32,7 +32,7 @@ class Percolation:
         - A[i,3] contains the size of the new cluster
     """
     
-    def __init__(self, G, formated_label = False): 
+    def __init__(self): 
         self._linkage_tree = None 
 
 

@@ -1,7 +1,7 @@
 from scipy.cluster.hierarchy import dendrogram
 from ._tree import _label_of_cut
 import numpy as np
-from cluster import Clustering
+from .cluster import Clustering
 
 def _get_dendrogram_ordering(parent, linkage, root):
     # COPIED FROM THE HDBSCAN LIBRARY

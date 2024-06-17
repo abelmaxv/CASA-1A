@@ -1,6 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from numpy import sqrt
+from percolation.percolation import Percolation
 
 # Creation of the toy model
 G = nx.MultiDiGraph()
@@ -36,6 +37,8 @@ dist = lambda e: sqrt((coords[e[0]]["coords"][0] - coords[e[1]]["coords"][0])**2
 for u,v in edge_list:
     length[(u,v,0)] = {"length" : dist((u,v))}
 nx.set_edge_attributes(G,length)
+print("Edges of the graph : ")
+print(G.edges(data = True))
 
 # Displaying the produced graph : 
 pos = nx.get_node_attributes(G, 'coords')
@@ -44,3 +47,22 @@ nx.draw_networkx_edges(G,pos, edge_color= "#B0B0B0", arrows=False)
 plt.title("Toy model network for testing algorithms")
 plt.axis("off")
 plt.savefig("test/toy_test/toy_network.png")
+plt.close()
+
+# Percolate the network : 
+clusterer = Percolation()
+clusterer.percolate(G)
+
+# Display the linkage tree :
+clusterer.linkage_tree.plot()
+plt.savefig("test/toy_test/toy_percolation_tree.png")
+plt.close()
+
+print("\n \n \n")
+
+# Extract clusters at a threshold : 
+treshold = 2.5
+clustering = clusterer.linkage_tree.label_of_cut(treshold)
+print(f"Membership table of the clustering with treshold {treshold} :")
+print(clustering.mem_tab)
+clustering.add_clusters_to_graph(G)

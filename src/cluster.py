@@ -44,7 +44,7 @@ class Clustering(object):
     
     def clusters_to_dict(self):
         """ Transforms the membership table in a dictionnary.
-        This is usefull to put labels as node attributes.
+        This is usefull to put cluster node attributes.
         """
         clusters_dict = {}
         for i in range(self.mem_tab.shape[0]):
@@ -54,7 +54,7 @@ class Clustering(object):
     def add_clusters_to_graph(self, G):
         """ Adds the cluster labelling to the nodes attributes of a graph
         """
-        _check_format(G, self.mem_arr.shape[0])
+        _check_format(G, self.mem_tab.shape[0])
         clusters_dict = self.clusters_to_dict()
         nx.set_node_attributes(G, clusters_dict, 'cluster')
 
