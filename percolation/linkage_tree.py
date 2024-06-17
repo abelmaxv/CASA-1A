@@ -1,5 +1,5 @@
 from scipy.cluster.hierarchy import dendrogram
-from _tree import _label_of_cut
+from ..src._tree import _label_of_cut
 import numpy as np
 from cluster import Cluster
 

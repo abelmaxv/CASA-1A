@@ -1,8 +1,8 @@
 import numpy as np
 cimport numpy as np
 
-from _union_find import UnionFind
-from _union_find cimport UnionFind
+from ._union_find import UnionFind
+from ._union_find cimport UnionFind
 
 
 
