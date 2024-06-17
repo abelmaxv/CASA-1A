@@ -7,4 +7,4 @@ ctypedef packed struct edge_t :
     float distance
     
 
-cdef edge_t[::1] transform_graph(G)
+cdef edge_t[::1] transform_graph(G, str length_attribute)

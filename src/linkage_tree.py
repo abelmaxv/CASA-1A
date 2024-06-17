@@ -1,7 +1,7 @@
 from scipy.cluster.hierarchy import dendrogram
-from ..src._tree import _label_of_cut
+from ._tree import _label_of_cut
 import numpy as np
-from cluster import Cluster
+from cluster import Clustering
 
 def _get_dendrogram_ordering(parent, linkage, root):
     # COPIED FROM THE HDBSCAN LIBRARY
@@ -35,10 +35,19 @@ def _calculate_linewidths(ordering, linkage, root):
 
 
 
-
-
 class LinkageTree(object):
+    """ Representation of a linkage tree
 
+    Attributes 
+    ----------
+        linkage_matrix : linkage_matrix : the linkage matrix representation of the computed linkage tree 
+    
+    A linkage matrix is a np.ndarray A with 4 columns : 
+    - A[i,0] and A[i,1] are the names of the merged clusters at step i
+    - A[i,2] contains the length of the link that merged the two clusters
+    - A[i,3] contains the size of the new cluster
+    """
+    
     def __init__(self, linkage_matrix):
         self._linkage_matrix = linkage_matrix
 
@@ -46,8 +55,55 @@ class LinkageTree(object):
     def plot(self, axis=None, truncate_mode=None, p=0, vary_line_width=True,
              cmap='viridis', colorbar=True):
         # COPIED FROM THE HDBSCAN LIBRARY
+        """
+        Plot a dendrogram of the single linkage tree.
+
+        Parameters
+        ----------
+        truncate_mode : str, optional
+                        The dendrogram can be hard to read when the original
+                        observation matrix from which the linkage is derived
+                        is large. Truncation is used to condense the dendrogram.
+                        There are several modes:
+
+        ``None/'none'``
+                No truncation is performed (Default).
+
+        ``'lastp'``
+                The last p non-singleton formed in the linkage are the only
+                non-leaf nodes in the linkage; they correspond to rows
+                Z[n-p-2:end] in Z. All other non-singleton clusters are
+                contracted into leaf nodes.
+
+        ``'level'/'mtica'``
+                No more than p levels of the dendrogram tree are displayed.
+                This corresponds to Mathematica(TM) behavior.
+
+        p : int, optional
+            The ``p`` parameter for ``truncate_mode``.
+
+        vary_line_width : boolean, optional
+            Draw downward branches of the dendrogram with line thickness that
+            varies depending on the size of the cluster.
+
+        cmap : string or matplotlib colormap, optional
+               The matplotlib colormap to use to color the cluster bars.
+               A value of 'none' will result in black bars.
+               (default 'viridis')
+
+        colorbar : boolean, optional
+                   Whether to draw a matplotlib colorbar displaying the range
+                   of cluster sizes as per the colormap. (default True)
+
+        Returns
+        -------
+        axis : matplotlib axis
+               The axis on which the dendrogram plot has been rendered.
+
+        """
 
         dendrogram_data = dendrogram(self._linkage_matrix, p=p, truncate_mode=truncate_mode, no_plot=True)
+        # Coordonates of the tree segments
         X = dendrogram_data['icoord']
         Y = dendrogram_data['dcoord']
 
@@ -110,7 +166,23 @@ class LinkageTree(object):
 
         return axis
 
+
     
     def label_of_cut(self, threshold):
-        clusters_array = _label_of_cut(self._linkage_matrix, threshold)
-        return Cluster(clusters_array)
+        """ Extract clusters at a given threshold in the linkage tree
+
+        Parameters
+        ----------
+            threshold : threshold at which the linkage tree is cut
+        
+        Returns
+        -------
+            clusters : a Clunstering object wich membership table is given by the
+            cut of the linkage tree at the given threshold  
+
+
+        The membership table is an array A such that A[i] contains the cluster label of node i.
+        """
+        memb_tab = _label_of_cut(self._linkage_matrix, threshold)
+        clusters = Clustering(memb_tab)
+        return clusters

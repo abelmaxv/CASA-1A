@@ -4,15 +4,38 @@ cimport numpy as np
 cimport cython
 
 cdef class UnionFind(object):
+    """ Implentation of the Union-Find data structure.
+
+    Attributes
+    ----------
+        parent_arr : parentship table that contains the tree structure of the union find
+
+        next_label : first avalable label for new cluster's name
+
+        size_arr : array that contains the sizes of the different elements
+
+    """
 
     def __init__(self, N):
-        self.parent_arr = -1 * np.ones(2 * N - 1, dtype=np.int_, order='C')
+        self.parent_arr = -1 * np.ones(2 * N - 1, dtype=np.int_)
         self.next_label = N
         self.size_arr = np.hstack((np.ones(N, dtype=np.intc),
                                    np.zeros(N-1, dtype=np.intc)))
 
 
     cdef void union(self, long m, long n):
+        """ Merges two clusters
+
+        Parameters
+        ----------
+            m : first cluster to merge
+            n : second cluster to merge
+        
+        Returns
+        -------
+            void
+        """
+
         if n != m :
             self.size_arr[self.next_label] = self.size_arr[m] + self.size_arr[n]
             self.parent_arr[m] = self.next_label
@@ -21,6 +44,18 @@ cdef class UnionFind(object):
         return
 
     cdef long fast_find(self, long n):
+        """ Finds the label if the cluster of one element
+
+        Parameters
+        ----------
+            n : the element of wich cluster is seaked
+
+        Returns
+        -------
+            n : the name of the cluster
+        """
+        # Commented implementation of shortcuts but it is bugged
+
         #cdef long p
         #p = n
         while self.parent_arr[n] != -1:
