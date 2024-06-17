@@ -1,4 +1,3 @@
-#import osmnx as ox
 import networkx as nx
 import matplotlib.pyplot as plt
 from percolation import Percolation
@@ -33,20 +32,21 @@ clusterer = Percolation(G)
 clusterer.percolate()
 
 
-clusters = clusterer.linkage_tree.label_of_cut(150)
+clusters = clusterer.linkage_tree.label_of_cut(50)
 clusters.add_clusters_to_graph(G)
 
+clusterer.linkage_tree.plot()
 
-
+plt.show()
 
 
 print(clusters.tab)
 
-cls = ox.plot.get_node_colors_by_attr(G, 'cluster', cmap='tab20')
+#cls = ox.plot.get_node_colors_by_attr(G, 'cluster', cmap='tab20')
 
-fig, ax = plt.subplots(figsize=(12,7))
+#fig, ax = plt.subplots(figsize=(12,7))
 
-fig, ax = ox.plot_graph(G, 
-                        node_color=cls,
-                        node_size = 25,
-                        ax=ax)
+#fig, ax = ox.plot_graph(G, 
+#                        node_color=cls,
+#                        node_size = 25,
+#                        ax=ax)

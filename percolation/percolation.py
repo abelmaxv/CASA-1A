@@ -11,9 +11,8 @@ class Percolation:
         # TO DO :
         #   include the mst option
 
-        
-        # The needed format for the network nodes name is ordered integers
         # May find something better than storing the whole graph ?
+        # The needed format for the network nodes name is ordered integers
         if formated_label :
             self.network = G
         else :

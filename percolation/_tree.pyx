@@ -7,19 +7,6 @@ from _union_find cimport UnionFind
 
 
 
-# To improve !
-def extract_from_union_find(UnionFind U, int n_nodes):
-    """ Gets the union_find table of a clustering and returns the list list of clusters.
-    """
-    clusters = []
-    for i in range(2*n_nodes):
-        clusters.append([])
-    for i in range(n_nodes):
-        clusters[U.fast_find(i)].append(i)
-    return [l for l in clusters if l != []]
-
-
-
 cpdef np.ndarray[dtype = long, ndim = 1] _label_of_cut(np.ndarray[dtype = double, ndim = 2] linkage_matrix, double threshold): 
     """ Extracts the cluster from the linkage tree at a given threshold.
         Computes percolation until threshold is reached.
