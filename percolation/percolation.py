@@ -1,7 +1,7 @@
 import networkx as nx
 import numpy as np
-from _percolation import percolate_network
-from linkage_tree import LinkageTree
+from ._percolation import percolate_network
+from ..src.linkage_tree import LinkageTree
 
 
 class Percolation: 
