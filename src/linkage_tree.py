@@ -183,6 +183,6 @@ class LinkageTree(object):
 
         The membership table is an array A such that A[i] contains the cluster label of node i.
         """
-        memb_tab = _label_of_cut(self._linkage_matrix, threshold)
-        clusters = Clustering(memb_tab)
+        memb_tab, size_tab = _label_of_cut(self._linkage_matrix, threshold)
+        clusters = Clustering(memb_tab, size_tab)
         return clusters

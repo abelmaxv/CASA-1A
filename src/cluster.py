@@ -30,17 +30,9 @@ class Clustering(object):
         size_tab : stores the size of each cluster of the clustering
     """
 
-    def __init__(self, mem_tab):
+    def __init__(self, mem_tab, size_tab):
         self.mem_tab = mem_tab
-        self._size_tab = None
-
-    @property
-    def size_tab(self):
-        if self._size_tab is None:
-            raise AttributeError("Size table was not computed")
-        else:
-            return self._size_tab
-    
+        self.size_tab = size_tab
     
     def clusters_to_dict(self):
         """ Transforms the membership table in a dictionnary.

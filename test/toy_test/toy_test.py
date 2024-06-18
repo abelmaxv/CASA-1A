@@ -65,4 +65,8 @@ treshold = 2.5
 clustering = clusterer.linkage_tree.label_of_cut(treshold)
 print(f"Membership table of the clustering with treshold {treshold} :")
 print(clustering.mem_tab)
+print(f"Sizes of the clusters with treshold {treshold} :")
+print(clustering.size_tab)
 clustering.add_clusters_to_graph(G)
+
+# Display the clusters : 
