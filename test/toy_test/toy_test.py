@@ -42,7 +42,7 @@ print(G.edges(data = True))
 
 # Displaying the produced graph : 
 pos = nx.get_node_attributes(G, 'coords')
-nx.draw_networkx_nodes(G,pos, node_color='#6FCC9F', node_size=20)
+nx.draw_networkx_nodes(G,pos, node_color='#6FCC9F', node_size=30)
 nx.draw_networkx_edges(G,pos, edge_color= "#B0B0B0", arrows=False)
 plt.title("Toy model network for testing algorithms")
 plt.axis("off")
@@ -61,12 +61,20 @@ plt.close()
 print("\n \n \n")
 
 # Extract clusters at a threshold : 
-treshold = 2.5
+treshold = 3
 clustering = clusterer.linkage_tree.label_of_cut(treshold)
 print(f"Membership table of the clustering with treshold {treshold} :")
 print(clustering.mem_tab)
+print("\n")
 print(f"Sizes of the clusters with treshold {treshold} :")
 print(clustering.size_tab)
 clustering.add_clusters_to_graph(G)
 
 # Display the clusters : 
+node_colors = clustering.get_node_colors()
+nx.draw_networkx_nodes(G,pos, node_color=node_colors, node_size=30)
+nx.draw_networkx_edges(G,pos, edge_color= "#B0B0B0", arrows=False)
+plt.title(f"Clustering of the toy model at threshold {treshold}")
+plt.axis("off")
+plt.savefig("test/toy_test/toy_clustering.png")
+plt.close()
