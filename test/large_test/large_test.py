@@ -9,7 +9,7 @@ G = ox.graph_from_place("Modena, Italy", network_type = "drive", simplify = True
 G = nx.convert_node_labels_to_integers(G)
 
 # Displaying the produced graph : 
-ox.plot.plot_graph(G,node_size = 5, node_color = '#3F4A99', edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = False, save = True, filepath = "test/large_test/large_network.png", close = True)
+ox.plot.plot_graph(G,node_size = 2, node_color = '#3F4A99', edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = False, save = True, filepath = "test/large_test/large_network.png", close = True)
 
 # Percolate the network : 
 clusterer = Percolation()
@@ -33,5 +33,5 @@ print(clustering.size_tab)
 clustering.add_clusters_to_graph(G)
 
 # Display the clusters : 
-node_colors = clustering.get_node_colors()
-ox.plot.plot_graph(G, node_size = 5, node_color = node_colors, edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = False, save = True, filepath = "test/large_test/large_clustering.png", close = True)
+node_colors = clustering.get_node_colors(min_size=30)
+ox.plot.plot_graph(G, node_size = 2, node_color = node_colors, edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = False, save = True, filepath = "test/large_test/large_clustering.png", close = True)

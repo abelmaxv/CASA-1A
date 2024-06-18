@@ -33,5 +33,5 @@ print(clustering.size_tab)
 clustering.add_clusters_to_graph(G)
 
 # Display the clusters : 
-node_colors = clustering.get_node_colors()
+node_colors = clustering.get_node_colors(min_size = 10 )
 ox.plot.plot_graph(G, node_color = node_colors, edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = False, save = True, filepath = "test/small_test/small_clustering.png", close = True)

@@ -1,0 +1,2 @@
+class CondensedTree(object):
+    
