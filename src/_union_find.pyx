@@ -54,7 +54,7 @@ cdef class UnionFind(object):
         -------
             n : the name of the cluster
         """
-        # Commented implementation of shortcuts but it is bugged
+        # Commented implementation of shortcuts : it is bugged
 
         #cdef long p
         #p = n

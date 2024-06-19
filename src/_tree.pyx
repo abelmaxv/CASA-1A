@@ -4,6 +4,15 @@ cimport numpy as np
 from ._union_find import UnionFind
 from ._union_find cimport UnionFind
 
+cdef np.double_t INFTY = np.inf
+
+cond_edge_dtype = np.dtype([
+    ("parent", np.int_),
+    ("child", np.int_),
+    ("lamb_val", np.double),
+    ("child_size", np.int_)
+]) 
+
 
 cdef tuple clean_memb_tab(long[:] memb_tab_temp):
     """ Takes a temporary membership table (labels are not 0,...,k-1) and returns a size table and a correct membership table
@@ -49,6 +58,8 @@ cdef tuple clean_memb_tab(long[:] memb_tab_temp):
             i+=1
     
     return memb_tab, size_tab
+
+
 
 
 cpdef tuple _label_of_cut(np.ndarray[dtype = double, ndim = 2] linkage_matrix, double threshold): 
@@ -100,3 +111,72 @@ cpdef tuple _label_of_cut(np.ndarray[dtype = double, ndim = 2] linkage_matrix, d
     memb_tab, size_tab = clean_memb_tab(memb_tab_temp)
 
     return memb_tab, size_tab
+
+
+
+
+cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtype = double, ndim = 2] linkage_matrix, int min_cluster_size) :
+    # TO DO HANDLE LABELS
+    """ Implementing runt prunning
+    """
+    cdef :
+        long n_nodes = linkage_matrix.shape[0]+1
+        long current_node
+        long first_child
+        long second_child
+        long first_child_size
+        long second_child_size
+        double lamb_val
+        double dist
+        cond_edge_t cond_edge1
+        cond_edge_t cond_edge2
+        cond_edge_t[:] result = np.zeros(n_nodes-1, dtype = cond_edge_dtype)
+        int edge_count = 0
+
+    # maximum cluster label is nb_label -1 = n_nodes + len(likage_matrix) - 1
+    current_node = n_nodes + linkage_matrix.shape[0] - 1
+
+    while current_node >= n_nodes:
+ 
+        first_child =  <long>linkage_matrix[current_node-n_nodes, 0]
+        second_child = <long> linkage_matrix[current_node - n_nodes, 1]
+
+        dist = linkage_matrix[current_node-n_nodes, 2]
+        if dist>0.0:
+            lamb_val = 1/dist
+        else: 
+            lamb_val = INFTY
+            
+        if first_child >= n_nodes : 
+            first_child_size = <long> linkage_matrix[first_child-n_nodes,3]
+        else : 
+            first_child_size = 1
+
+        if second_child >= n_nodes : 
+            second_child_size = <long> linkage_matrix[first_child-n_nodes,3]
+        else : 
+            second_child_size = 1
+        
+        # Checks is runt size of the edge is high enough
+        # if so, add node to result
+        if first_child_size >= min_cluster_size and second_child_size >= min_cluster_size : 
+            cond_edge1.parent = current_node
+            cond_edge1.child = first_child
+            cond_edge1.lamb_val = lamb_val
+            cond_edge1.child_size = first_child_size
+            
+            result[edge_count] = cond_edge1
+            edge_count +=1
+
+            cond_edge2.parent = current_node
+            cond_edge2.child = second_child
+            cond_edge2.lamb_val = lamb_val
+            cond_edge2.child_size = second_child_size
+
+            result[edge_count] = cond_edge2
+            edge_count +=1
+
+        current_node = current_node -1
+
+
+    return np.asarray(result, dtype = cond_edge_dtype)[:edge_count]

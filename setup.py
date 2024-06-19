@@ -16,11 +16,13 @@ extensions = [
               include_dirs=[numpy_path]),
 
     Extension("src._tree", ["src/_tree.pyx"],
-              include_dirs=[numpy_path]),
+              include_dirs=[numpy_path], 
+              depends=["src/_union_find.pyx"]),
 
     Extension("percolation._percolation", ["percolation/_percolation.pyx"],
               include_dirs=[numpy_path],
               depends= ["src/_union_find.pyx", "src/_tree.pyx", "src/_graph.pyx"])
+
 ]
 
 setup(

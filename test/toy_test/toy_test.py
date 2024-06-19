@@ -78,3 +78,11 @@ plt.title(f"Clustering of the toy model at threshold {treshold}")
 plt.axis("off")
 plt.savefig("test/toy_test/toy_clustering.png")
 plt.close()
+
+print("\n \n \n")
+
+# Compute the condensed tree
+clusterer.compute_condensed_tree(2)
+condensed_tree = clusterer.condensed_tree
+print("Condensed tree : ")
+print(condensed_tree.array_rep)
