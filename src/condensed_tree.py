@@ -1,7 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 
-from ._tree import recurse_leaf_dfs
+from ._tree import recurse_leaf_dfs, _compute_stability
 
 #COPIED FROM HDBSCAN LIB
 CB_LEFT = 0
@@ -400,3 +400,6 @@ class CondensedTree(object):
             axis.set_ylabel('$\lambda$ value')
 
             return axis
+    
+    def compute_stability(self):
+        return _compute_stability(self._raw_tree)

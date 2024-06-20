@@ -318,3 +318,39 @@ cpdef list recurse_leaf_dfs(np.ndarray cluster_tree, np.intp_t current_node):
         return [current_node,]
     else:
         return sum([recurse_leaf_dfs(cluster_tree, child) for child in children], [])
+
+
+
+cpdef np.ndarray[dtype = double, ndim = 1] _compute_stability(np.ndarray[dtype = cond_edge_t, ndim = 1] condensed_tree) : 
+    """ Computes the stability score for all clusters in the cluster tree
+
+    Parameters  
+    ----------
+        condensed_tree : condensed_tree : np.ndarray that respresents the result of the runt pruning procedure on the linkage tree
+
+    Returns 
+    -------
+        clusters_stability : a np.ndarray that stores the stability score for all the clusters in the tree
+    """ 
+    cdef:
+        long n_clusters = condensed_tree.shape[0]+1
+        np.ndarray[dtype = double, ndim = 1] clusters_stability = np.zeros(n_clusters, dtype = np.double)
+        cond_edge_t current_edge
+        double[:] birth = np.zeros(n_clusters, dtype = np.double)
+        long parent
+        long child 
+        double lamb_val 
+        long child_size
+
+    for current_edge in condensed_tree : 
+        parent = current_edge.parent
+        child = current_edge.child
+        lamb_val = current_edge.lamb_val
+        child_size = current_edge.child_size
+
+        if birth[child] == 0:
+            birth[child] = lamb_val
+        
+        clusters_stability[parent] += (lamb_val - birth[parent])*child_size
+    
+    return clusters_stability
