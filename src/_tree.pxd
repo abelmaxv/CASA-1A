@@ -20,3 +20,4 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
 cpdef list recurse_leaf_dfs(np.ndarray cluster_tree, np.intp_t current_node)
 
 cpdef np.ndarray[dtype = double, ndim = 1] _compute_stability(np.ndarray[dtype = cond_edge_t, ndim = 1] condensed_tree)
+cdef np.ndarray[dtype = char, ndim=1] select_clusters (np.ndarray[dtype = cond_edge_t, ndim = 1] condensed_tree, np.ndarray[dtype = double, ndim = 1] clusters_stability)

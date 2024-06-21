@@ -163,6 +163,17 @@ cdef np.ndarray[dtype = long, ndim = 1] bfs_from_linkage_matrix(np.ndarray[dtype
     return result[:nb_results]
 
 
+cpdef list recurse_leaf_dfs(np.ndarray cluster_tree, np.intp_t current_node):
+    #COPIED FROM HDBSCAN LIB
+    children = cluster_tree[cluster_tree['parent'] == current_node]['child']
+    if len(children) == 0:
+        return [current_node,]
+    else:
+        return sum([recurse_leaf_dfs(cluster_tree, child) for child in children], [])
+    
+
+
+
 cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtype = double, ndim = 2] linkage_matrix, int min_cluster_size) :
     """ Implementing runt prunning procedure to create condensed_tree
 
@@ -311,13 +322,7 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
     return np.asarray(result, dtype = cond_edge_dtype)[:edge_count]
 
 
-cpdef list recurse_leaf_dfs(np.ndarray cluster_tree, np.intp_t current_node):
-    #COPIED FROM HDBSCAN LIB
-    children = cluster_tree[cluster_tree['parent'] == current_node]['child']
-    if len(children) == 0:
-        return [current_node,]
-    else:
-        return sum([recurse_leaf_dfs(cluster_tree, child) for child in children], [])
+
 
 
 
@@ -326,7 +331,7 @@ cpdef np.ndarray[dtype = double, ndim = 1] _compute_stability(np.ndarray[dtype =
 
     Parameters  
     ----------
-        condensed_tree : condensed_tree : np.ndarray that respresents the result of the runt pruning procedure on the linkage tree
+        condensed_tree : np.ndarray that respresents the result of the runt pruning procedure on the linkage tree
 
     Returns 
     -------
@@ -342,6 +347,7 @@ cpdef np.ndarray[dtype = double, ndim = 1] _compute_stability(np.ndarray[dtype =
         double lamb_val 
         long child_size
 
+    # Edges of the condensed_tree are given in bfs order
     for current_edge in condensed_tree : 
         parent = current_edge.parent
         child = current_edge.child
@@ -354,3 +360,63 @@ cpdef np.ndarray[dtype = double, ndim = 1] _compute_stability(np.ndarray[dtype =
         clusters_stability[parent] += (lamb_val - birth[parent])*child_size
     
     return clusters_stability
+
+
+
+
+cdef np.ndarray[dtype = char, ndim=1] select_clusters (np.ndarray[dtype = cond_edge_t, ndim = 1] condensed_tree, np.ndarray[dtype = double, ndim = 1] clusters_stability):
+    """ Selects the relevent clusters given the stability array. Performs two searches in the cluster tree. 
+
+    Paramters
+    ---------
+        condensed_tree : np.ndarray that respresents the result of the runt pruning procedure on the linkage tree
+
+        clusters_stability : a np.ndarray that stores the stability score for all the clusters in the tree
+    
+    Returns 
+    -------
+        is_selected : a np.ndarray that indicates wether cluster i is selected
+    """
+
+    cdef : 
+        int n_clusters = condensed_tree.shape[0]+1
+        double[:] relative_stability = np.zeros(n_clusters, dtype = np.double)
+        double[:] score = np.empty(n_clusters, dtype = np.double)
+        char[:] is_selected = np.ones(n_clusters, dtype = np.int8)
+        char[:] ancestor_selected = np.zeros(n_clusters, dtype = np.int_8)
+        cond_edge_t cond_edge
+        long child
+        long parent
+        long root = condensed_tree[0].parent
+
+    # Computing score of each cluster and selection array bottom-up
+    for cond_edge in condensed_tree[::-1] :
+        child = cond_edge.child
+        parent = cond_edge.parent
+
+        relative_stability[parent] += score[child]
+        score[parent] = max(relative_stability[parent], clusters_stability[parent])
+
+        if relative_stability[parent]>clusters_stability[parent]:
+            is_selected[parent] = 0
+
+    # Clean the selection array top-to-bottom
+    # Do not select the root which is irrelevant
+    is_selected[root] = 0
+    for cond_edge in condensed_tree : 
+        
+        child = cond_edge.child
+        parent = cond_edge.parent
+
+        if ancestor_selected[parent] == 1:
+            ancestor_selected[child] = 1
+            is_selected[child] = 0
+            is_selected[parent] = 0
+
+        elif is_selected[parent] == 1:
+            ancestor_selected[child] = 1
+        
+    return is_selected
+        
+
+ 
