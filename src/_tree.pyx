@@ -23,7 +23,7 @@ cdef tuple clean_memb_tab(long[:] memb_tab_temp):
     
     Returns
     -------
-        memb_tab : a membership table with cluster label in 0,...,k-1
+        memb_tab : a membership table with cluster label in 0,...,k-1 and -1 if i does not belong to any
 
         size_tab : np.ndarray of cluster sizes. size_tab[i] contains the size of the cluter which id is i 
     """
@@ -36,8 +36,9 @@ cdef tuple clean_memb_tab(long[:] memb_tab_temp):
         int i = 0
     
     # Computing size table
-    for i in range(n_nodes): 
-        size_tab[memb_tab_temp[i]] = size_tab[memb_tab_temp[i]]+1
+    for i in range(n_nodes):
+        if memb_tab_temp[i] != -1 : 
+            size_tab[memb_tab_temp[i]] = size_tab[memb_tab_temp[i]]+1
 
     # Assigning cluster id
     for i in range(2*n_nodes-1):
@@ -47,7 +48,10 @@ cdef tuple clean_memb_tab(long[:] memb_tab_temp):
     
     # Relabelling in membership_table
     for i in range(n_nodes):
-        memb_tab[i] = clusters_id[memb_tab[i]]
+        if memb_tab_temp[i] == -1 : 
+            memb_tab[i] = -1
+        else: 
+            memb_tab[i] = clusters_id[memb_tab[i]]
     
     # Cleanning size_table 
     i = 0
@@ -207,7 +211,7 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
         cond_edge_t cond_edge1
         cond_edge_t cond_edge2
         cond_edge_t cond_edge
-        # Builds a tree of clusters so the size is nb_label -1 = n_nodes + len(likage_matrix) - 1 (at most)
+        # Builds a tree of clusters, thus the size is nb_label -1 = n_nodes + len(likage_matrix) - 1 (at most)
         cond_edge_t[:] result = np.zeros(n_nodes + linkage_matrix.shape[0] -1, dtype = cond_edge_dtype)
         int edge_count = 0
         char[:] ignore = np.zeros(n_nodes+linkage_matrix.shape[0], dtype = np.int8)
@@ -235,13 +239,13 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
             else: 
                 lamb_val = INFTY
                 
-            if first_child >= n_nodes : 
+            if first_child >= n_nodes :
                 first_child_size = <long> linkage_matrix[first_child-n_nodes,3]
             else : 
                 first_child_size = 1
 
             if second_child >= n_nodes : 
-                second_child_size = <long> linkage_matrix[first_child-n_nodes,3]
+                second_child_size = <long> linkage_matrix[second_child-n_nodes,3]
             else : 
                 second_child_size = 1
             
@@ -338,7 +342,7 @@ cpdef np.ndarray[dtype = double, ndim = 1] _compute_stability(np.ndarray[dtype =
         clusters_stability : a np.ndarray that stores the stability score for all the clusters in the tree
     """ 
     cdef:
-        long n_clusters = condensed_tree.shape[0]+1
+        long n_clusters = 2*condensed_tree[0].parent-1
         np.ndarray[dtype = double, ndim = 1] clusters_stability = np.zeros(n_clusters, dtype = np.double)
         cond_edge_t current_edge
         double[:] birth = np.zeros(n_clusters, dtype = np.double)
@@ -358,7 +362,7 @@ cpdef np.ndarray[dtype = double, ndim = 1] _compute_stability(np.ndarray[dtype =
             birth[child] = lamb_val
         
         clusters_stability[parent] += (lamb_val - birth[parent])*child_size
-    
+
     return clusters_stability
 
 
@@ -379,11 +383,11 @@ cdef char[:] select_clusters (np.ndarray[dtype = cond_edge_t, ndim = 1] condense
     """
 
     cdef : 
-        int n_clusters = condensed_tree.shape[0]+1
+        int n_clusters = 2*condensed_tree[0].parent-1
         double[:] relative_stability = np.zeros(n_clusters, dtype = np.double)
-        double[:] score = np.empty(n_clusters, dtype = np.double)
+        double[:] score = np.zeros(n_clusters, dtype = np.double)
         char[:] is_selected = np.ones(n_clusters, dtype = np.int8)
-        char[:] ancestor_selected = np.zeros(n_clusters, dtype = np.int_8)
+        char[:] ancestor_selected = np.zeros(n_clusters, dtype = np.int8)
         cond_edge_t cond_edge
         long child
         long parent
@@ -399,7 +403,6 @@ cdef char[:] select_clusters (np.ndarray[dtype = cond_edge_t, ndim = 1] condense
 
         if relative_stability[parent]>clusters_stability[parent]:
             is_selected[parent] = 0
-
     # Clean the selection array top-to-bottom
     # Do not select the root which is irrelevant
     is_selected[root] = 0
@@ -415,12 +418,12 @@ cdef char[:] select_clusters (np.ndarray[dtype = cond_edge_t, ndim = 1] condense
 
         elif is_selected[parent] == 1:
             ancestor_selected[child] = 1
-        
+            is_selected[child] = 0
     return is_selected
     
     
  
-cdef long[:] label_of_stability_temp(np.ndarray[dtype = cond_edge_t, ndim = 1] condensed_tree, np.ndarray[dtype = char, ndim=1] is_selected):
+cdef np.ndarray[dtype = long, ndim = 1] label_of_stability_temp(np.ndarray[dtype = cond_edge_t, ndim = 1] condensed_tree, char[:] is_selected):
     """ Commputes a temporary membership table from the condensed tree and the cluster slection.
 
     Parmeters
@@ -431,15 +434,15 @@ cdef long[:] label_of_stability_temp(np.ndarray[dtype = cond_edge_t, ndim = 1] c
     
     Returns
     -------
-        memb_tab_temp : Memoryview of long integers that represents a temporary membership table
+        memb_tab_temp : np.ndarray of long integers that represents a temporary membership table
     
     Here temporary means that clusters label are not {0,..., k-1} integers
     """
     cdef : 
-        long n_clusters = condensed_tree.shape[0]+1
-        # Numper of cluster is the label of the root
+        long n_clusters = 2*condensed_tree[0].parent-1
+        # Numper of nodes is the label of the root
         long n_nodes = condensed_tree[0].parent
-        long[:] memb_tab_temp = (-1) * np.ones(n_clusters, dtype = long)
+        np.ndarray[dtype = long, ndim = 1] memb_tab_temp = (-1) * np.ones(n_clusters, dtype = long)
         cond_edge_t cond_edge
         long parent
         long child
@@ -453,7 +456,8 @@ cdef long[:] label_of_stability_temp(np.ndarray[dtype = cond_edge_t, ndim = 1] c
         
         memb_tab_temp[child] = memb_tab_temp[parent]
 
-    return np.asarray(memb_tab_temp, dtype = long)[:n_nodes]
+    memb_tab_temp = memb_tab_temp[:n_nodes]
+    return memb_tab_temp
 
 
 
@@ -462,13 +466,11 @@ cpdef tuple _label_of_stability(np.ndarray[dtype = cond_edge_t, ndim = 1] conden
     """ TO DO 
     """
     cdef : 
-        char[:] is_selected
-        long[:] memb_tab_temp
+        char[:] is_selected = select_clusters(condensed_tree, clusters_stability)
+        long[:] memb_tab_temp = label_of_stability_temp(condensed_tree, is_selected)
         np.ndarray[dtype=long, ndim = 1] memb_tab
         np.ndarray[dtype = int, ndim =1] size_tab
 
-    is_selected = select_clusters(condensed_tree, clusters_stability)
-    memb_tab_temp = label_of_stability_temp(condensed_tree, is_selected)
     memb_tab, size_tab = clean_memb_tab(memb_tab_temp)
 
     return memb_tab, size_tab

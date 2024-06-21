@@ -54,3 +54,7 @@ print("Displaying the condensed tree ... \n")
 clusterer.condensed_tree.plot(log_size = True)
 plt.title("Condensed tree of the large model (Moneda, Italy)")
 plt.savefig("test/large_test/large_condensed_tree.png")
+plt.close()
+
+
+print(clusterer.condensed_tree.compute_stability())

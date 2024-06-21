@@ -1,7 +1,8 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 
-from ._tree import recurse_leaf_dfs, _compute_stability
+from ._tree import recurse_leaf_dfs, _compute_stability, _label_of_stability
+from .cluster import Clustering
 
 #COPIED FROM HDBSCAN LIB
 CB_LEFT = 0
@@ -47,6 +48,14 @@ class CondensedTree(object):
 
     def __init__(self, raw_tree):
         self._raw_tree = raw_tree
+        self._clusters_stability = None
+
+    @property
+    def clusters_stability(self):
+        if self._clusters_stability is None : 
+            raise AttributeError("Clusters' stabliity was not computed yet. Run self.compute_stability.")
+        else : 
+            return self._clusters_stability
 
     
     def get_plot_data(self,
@@ -401,5 +410,21 @@ class CondensedTree(object):
 
             return axis
     
-    def compute_stability(self):
-        return _compute_stability(self._raw_tree)
+
+    def compute_stablity(self):
+        """ TO DO
+        """
+        self._clusters_stability = _compute_stability(self._raw_tree)
+        return self 
+
+
+    def label_of_stability(self):
+        """ TO DO
+        """
+        if self._clusters_stability is None : 
+            self.compute_stablity()
+
+        mem_tab, size_tab = _label_of_stability(self._raw_tree, self._clusters_stability)
+        clusters = Clustering(mem_tab, size_tab)
+        return clusters
+

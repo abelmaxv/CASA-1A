@@ -21,7 +21,7 @@ clusterer.percolate(G)
 
 # Display the linkage tree :
 print("Displaying the percolation tree ... \n")
-clusterer.linkage_tree.plot(truncate_mode='level', p = 10)
+clusterer.linkage_tree.plot(truncate_mode='level', p = 7)
 plt.title("Simplified percolation tree of the small model (Meudon, France)")
 plt.savefig("test/small_test/small_percolation_tree.png")
 plt.close()
@@ -41,15 +41,33 @@ clustering.add_clusters_to_graph(G)
 
 # Display the clusters : 
 print(f"Displaying the clusters at threshold {threshold} ... \n")
-node_colors = clustering.get_node_colors(min_size = 10)
+node_colors = clustering.get_node_colors(min_size = 20)
 ox.plot.plot_graph(G, node_color = node_colors, edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = False, save = True, filepath = "test/small_test/small_clustering.png", close = True)
 
 print("\n \n \n")
 
 # Compute the condensed tree
 print("Computing the condensed tree ... \n")
-clusterer.compute_condensed_tree(20)
+clusterer.compute_condensed_tree(min_size=10)
+
+# Display the condense tree
 print("Displaying the condensed tree ... \n")
-clusterer.condensed_tree.plot(log_size= True, max_rectangles_per_icicle = 3)
+clusterer.condensed_tree.plot()
 plt.title("Condensed tree of the small model (Meudon, France)")
 plt.savefig("test/small_test/small_condensed_tree.png")
+plt.close()
+
+
+# Get clusters out of stability
+print("Computing stability clusters ... \n")
+clustering = clusterer.condensed_tree.label_of_stability()
+print("Membership table of the stability clustering : ")
+print(clustering.mem_tab)
+print("\n")
+print("Sizes of the stability clusters : ")
+print(clustering.size_tab)
+
+# Displaying the clusters
+print("Displaying the stability clusters ... \n")
+node_colors = clustering.get_node_colors()
+ox.plot.plot_graph(G, node_color = node_colors, edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = False, save = True, filepath = "test/small_test/small_stability_clustering.png", close = True)

@@ -5,7 +5,7 @@ from matplotlib import colormaps
 def _check_format(G, size_tab):
     """ Check if the cluster labelling can be applied on a graph : 
     - G must a nx.MultiDiGrpah
-    - Nodes must be labelled with integer 0,...,n-1
+    - Nodes must be labelled with integer 0,...,n-1 
     - n must be lower than self.mem_arr.shape[0]
     """
     if not (isinstance(G, nx.MultiDiGraph)):
@@ -106,6 +106,10 @@ class Clustering(object):
 
             change : if False, it uses the precomputed colors
                      if True, it computes new colors
+            
+            min_size : if a cluster has a size too small it is colored with default color
+
+            default : default color (grey)
         
         Returns
         -------
@@ -120,7 +124,10 @@ class Clustering(object):
         
         node_colors = ["" for i in range(n)]
         for i in range(n):
-            node_colors[i] = cluster_colors[self.mem_tab[i]]
+            if self.mem_tab[i] != -1 : 
+                node_colors[i] = cluster_colors[self.mem_tab[i]]
+            else: 
+                node_colors[i] = default
         
         return node_colors
     

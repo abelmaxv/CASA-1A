@@ -41,7 +41,7 @@ nx.set_edge_attributes(G,length)
 print("Edges of the graph : ")
 print(G.edges(data = True))
 
-print(f"Size of the model : {G.number_of_nodes()} \n")
+print(f"\nSize of the model : {G.number_of_nodes()} \n")
 
 # Displaying the produced graph : 
 print("Displaying the graph ... \n ")
@@ -96,6 +96,26 @@ print(f"Computing the condensed tree with min_cluster_size {min_cluster_size} ..
 # Display the condensed tree
 print("Displaying the condensed tree ... \n")
 clusterer.compute_condensed_tree(min_cluster_size)
+print(clusterer.condensed_tree._raw_tree)
 clusterer.condensed_tree.plot()
 plt.title("Condensed tree of the toy model")
 plt.savefig("test/toy_test/toy_condensed_tree.png")
+plt.close()
+
+
+# Get clusters out of stability
+print("Computing stability clusters ... \n")
+clustering = clusterer.condensed_tree.label_of_stability()
+print("Membership table of the stability clustering : ")
+print(clustering.mem_tab)
+print("\n")
+
+# Displaying the stability clusters
+print("Displaying the stability clusters ... \n")
+node_colors = clustering.get_node_colors()
+nx.draw_networkx_nodes(G,pos, node_color=node_colors, node_size=30)
+nx.draw_networkx_edges(G,pos, edge_color= "#B0B0B0", arrows=False)
+plt.title("Stability clustering for toy model")
+plt.axis("off")
+plt.savefig("test/toy_test/toy_stability_clustering.png")
+plt.close()
