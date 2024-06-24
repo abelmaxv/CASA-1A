@@ -421,8 +421,7 @@ class CondensedTree(object):
         print(self.clusters_stability)
 
         clusters = _get_selected_clusters(self._raw_tree, self.clusters_stability)
-        print("Selected clusters")
-        print(clusters)
+        
         return clusters
 
 

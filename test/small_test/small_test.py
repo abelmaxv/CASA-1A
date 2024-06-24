@@ -71,7 +71,7 @@ print(clustering.size_tab)
 print("Displaying clusters in the tree... \n")
 clusterer.condensed_tree.plot(select_clusters = True)
 plt.title("Condensed tree with clusters of the small model (Meudon, France)")
-plt.save_fig("test/small_test/small_clusters_condensed_tree.png")
+plt.savefig("test/small_test/small_clusters_condensed_tree.png")
 plt.close()
 
 # Displaying the clusters

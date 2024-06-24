@@ -490,7 +490,8 @@ cpdef np.ndarray[dtype = long, ndim = 1] _get_selected_clusters(np.ndarray[dtype
     
     # Look for non empty clusters
     for i in range(len(memb_tab_temp)):
-        size[memb_tab_temp[i]]+=1
+        if memb_tab_temp[i] != -1:
+            size[memb_tab_temp[i]]+=1
 
     # List the non empty clusters
     for i in range(len(size)):
