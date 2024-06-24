@@ -1,52 +1,38 @@
-import networkx as nx
-import matplotlib.pyplot as plt
-from percolation import Percolation
-import matplotlib.pyplot as plt
+from sklearn.cluster import HDBSCAN
 import osmnx as ox
+import networkx as nx 
+import numpy as np
+from src.cluster import Clustering
 
-G = ox.graph_from_place("Meudon, France", network_type = "drive", simplify = True)
+print("import network... \n")
+G = ox.graph_from_place("Modena, Italy", network_type = "drive", simplify = True)
 G = nx.convert_node_labels_to_integers(G)
+#ox.plot.plot_graph(G, node_color = '#3F4A99', edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = True, save = False, filepath = "test/small_test/small_clustering.png", close = True)
+
+print("Floyd Warshall... \n")
+dist_dict  = nx.floyd_warshall(G, weight="length")
+n = G.number_of_nodes()
 
 
-# Create a new multidigraph
-#G = nx.MultiDiGraph()
+print("computing matrix... \n ")
+dist_mat = np.zeros((n,n))
+for i in range(n):
+    for j in range(i, n):
+        dist_mat[i,j] = dist_dict[i][j]
+        dist_mat[j,i] = dist_dict[i][j]
 
-# Add nodes
-#G.add_nodes_from([0, 1, 2])
+print("HDBSCAN... \n")
+clusterer = HDBSCAN(min_cluster_size = 10, metric= "precomputed")
+clusterer.fit(dist_mat)
+labels = clusterer.labels_
+print(labels)
+clustering = Clustering(clusterer.labels_)
+print("computing sizes.... \n")
+clustering.get_size_tab()
+print('ok')
 
-# Add edges with length attribute
-#G.add_edge(0, 1, length=5.0)
-#G.add_edge(0, 2, length=7.5)
-#G.add_edge(1, 2, length=3.0)
-#G.add_edge(2, 0, length=2.5)
+print('getting colors ... \n')
+colors = clustering.get_node_colors()
 
-
-#fig, ax = ox.plot_graph(G,
-#                        bgcolor= 'w',
-#                        node_color='k',
-#                        node_size = 10)
-
-
-clusterer = Percolation(G)
-
-clusterer.percolate()
-
-
-clusters = clusterer.linkage_tree.label_of_cut(50)
-clusters.add_clusters_to_graph(G)
-
-clusterer.linkage_tree.plot()
-
-plt.show()
-
-
-print(clusters.tab)
-
-#cls = ox.plot.get_node_colors_by_attr(G, 'cluster', cmap='tab20')
-
-#fig, ax = plt.subplots(figsize=(12,7))
-
-#fig, ax = ox.plot_graph(G, 
-#                        node_color=cls,
-#                        node_size = 25,
-#                        ax=ax)
+print("displaying the graph... \n")
+ox.plot.plot_graph(G, node_size = 2, node_color = colors, edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = True, save = False, filepath = "test/small_test/small_clustering.png", close = True)

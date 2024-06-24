@@ -48,7 +48,7 @@ print("\n \n \n")
 
 # Compute the condensed tree
 print("Computing the condensed tree ... \n")
-clusterer.compute_condensed_tree(min_size=10)
+clusterer.compute_condensed_tree(min_size=20)
 
 # Display the condense tree
 print("Displaying the condensed tree ... \n")
@@ -66,6 +66,13 @@ print(clustering.mem_tab)
 print("\n")
 print("Sizes of the stability clusters : ")
 print(clustering.size_tab)
+
+# Displaying clusters in the tree
+print("Displaying clusters in the tree... \n")
+clusterer.condensed_tree.plot(select_clusters = True)
+plt.title("Condensed tree with clusters of the small model (Meudon, France)")
+plt.save_fig("test/small_test/small_clusters_condensed_tree.png")
+plt.close()
 
 # Displaying the clusters
 print("Displaying the stability clusters ... \n")

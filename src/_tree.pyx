@@ -476,6 +476,31 @@ cpdef tuple _label_of_stability(np.ndarray[dtype = cond_edge_t, ndim = 1] conden
     return memb_tab, size_tab
 
 
+cpdef np.ndarray[dtype = long, ndim = 1] _get_selected_clusters(np.ndarray[dtype = cond_edge_t, ndim = 1] condensed_tree, np.ndarray[dtype = double, ndim = 1] clusters_stability):
+    """ TO DO
+    """
+    cdef : 
+        char[:] is_selected = select_clusters(condensed_tree, clusters_stability)
+        long[:] memb_tab_temp = label_of_stability_temp(condensed_tree, is_selected)
+        int n_clusters = 2*condensed_tree[0].parent -1
+        int[:] size = np.zeros(n_clusters, dtype = np.intc)
+        int cluster_count = 0
+        np.ndarray[dtype = long, ndim = 1] cluster_list = np.empty(n_clusters, dtype = np.int_)
+        int i
+    
+    # Look for non empty clusters
+    for i in range(len(memb_tab_temp)):
+        size[memb_tab_temp[i]]+=1
+
+    # List the non empty clusters
+    for i in range(len(size)):
+        if size[i]>0:
+            cluster_list[cluster_count] = i
+            cluster_count+=1
+
+    return cluster_list[:cluster_count]
+    
+    
     
         
 

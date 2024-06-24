@@ -1,7 +1,8 @@
 import numpy as np 
 import matplotlib.pyplot as plt
+from warnings import warn
 
-from ._tree import recurse_leaf_dfs, _compute_stability, _label_of_stability
+from ._tree import recurse_leaf_dfs, _compute_stability, _label_of_stability, _get_selected_clusters
 from .cluster import Clustering
 
 #COPIED FROM HDBSCAN LIB
@@ -222,7 +223,7 @@ class CondensedTree(object):
 
 
 
-    def plot(self, leaf_separation=1, cmap='viridis', select_clusters=False,
+    def plot(self, leaf_separation=1, cmap='plasma', select_clusters=False,
                 label_clusters=False, selection_palette=None,
                 axis=None, colorbar=True, log_size=False,
                 max_rectangles_per_icicle=20):
@@ -243,7 +244,7 @@ class CondensedTree(object):
                             How far apart to space the final leaves of the
                             dendrogram.
 
-            cmap : string or matplotlib colormap, optional (default viridis)
+            cmap : string or matplotlib colormap, optional (default plasma)
                 The matplotlib colormap to use to color the cluster bars.
 
 
@@ -410,6 +411,20 @@ class CondensedTree(object):
 
             return axis
     
+    def _select_clusters(self): 
+        """ TO DO
+        """
+        if self._clusters_stability is None : 
+            self.compute_stablity()
+
+        print("Stability : ")
+        print(self.clusters_stability)
+
+        clusters = _get_selected_clusters(self._raw_tree, self.clusters_stability)
+        print("Selected clusters")
+        print(clusters)
+        return clusters
+
 
     def compute_stablity(self):
         """ TO DO

@@ -99,7 +99,7 @@ clusterer.compute_condensed_tree(min_cluster_size)
 print(clusterer.condensed_tree._raw_tree)
 clusterer.condensed_tree.plot()
 plt.title("Condensed tree of the toy bis model")
-plt.savefig("test/toy_test/toybis_condensed_tree.png")
+plt.savefig("test/toybis_test/toybis_condensed_tree.png")
 plt.close()
 
 
@@ -109,6 +109,13 @@ clustering = clusterer.condensed_tree.label_of_stability()
 print("Membership table of the stability clustering : ")
 print(clustering.mem_tab)
 print("\n")
+
+# Displaying clusters in the tree
+print("Displaying clusters in the tree... \n")
+clusterer.condensed_tree.plot(select_clusters = True)
+plt.title("Condensed tree with clusters of the toy bis model")
+plt.savefig("test/toybis_test/toybis_clusters_condensed_tree.png")
+plt.close()
 
 # Displaying the stability clusters
 print("Displaying the stability clusters ... \n")

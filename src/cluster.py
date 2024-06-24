@@ -37,9 +37,9 @@ class Clustering(object):
         size_tab : stores the size of each cluster of the clustering
     """
 
-    def __init__(self, mem_tab, size_tab):
+    def __init__(self, mem_tab, size_tab = None):
         self.mem_tab = mem_tab
-        self.size_tab = size_tab
+        self._size_tab = size_tab
         self._cluster_colors = None
 
     @property
@@ -48,6 +48,28 @@ class Clustering(object):
             raise AttributeError("Cluster colors were not initialised. Run self.get_cluster_colors.")
         else : 
             return self._cluster_colors
+        
+    @property
+    def size_tab(self):
+        if self._size_tab is None : 
+            raise AttributeError("Size table was not initialised. Run self.get_size_tab.")
+        else :
+            return self._size_tab
+
+    def get_size_tab(self):
+        """ TO DO
+        """
+        size_tab = np.zeros(self.mem_tab.shape[0])
+        for i in self.mem_tab:
+            size_tab[i] +=1
+        i = 0 
+        while i < size_tab.shape[0]:
+            if size_tab[i] == 0:
+                size_tab = np.delete(size_tab, i, axis = 0)
+            else: 
+                i+=1
+        self._size_tab = size_tab
+        return self
     
     def clusters_to_dict(self):
         """ Transforms the membership table in a dictionnary.
@@ -84,7 +106,9 @@ class Clustering(object):
         -------
             colors_hex : a list of hex color for each cluster
         """
-        n = self.size_tab.shape[0]
+        if self._size_tab is None:
+            self.get_size_tab()
+        n = self._size_tab.shape[0]
         colors = colormaps[cmap](np.linspace(start, stop, n)) 
         #Shuffle so that close labels don't have the same color
         np.random.shuffle(colors)

@@ -53,7 +53,7 @@ class LinkageTree(object):
 
     
     def plot(self, axis=None, truncate_mode=None, p=0, vary_line_width=True,
-             cmap='viridis', colorbar=True):
+             cmap='plasma', colorbar=True):
         # COPIED FROM THE HDBSCAN LIBRARY
         """
         Plot a dendrogram of the single linkage tree.
@@ -89,7 +89,7 @@ class LinkageTree(object):
         cmap : string or matplotlib colormap, optional
                The matplotlib colormap to use to color the cluster bars.
                A value of 'none' will result in black bars.
-               (default 'viridis')
+               (default 'plasma')
 
         colorbar : boolean, optional
                    Whether to draw a matplotlib colorbar displaying the range
