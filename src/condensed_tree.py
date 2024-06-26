@@ -166,6 +166,9 @@ class CondensedTree(object):
             cluster_bounds[c][CB_BOTTOM] = cluster_y_coords[c]
             cluster_bounds[c][CB_TOP] = np.max(c_children['lamb_val'])
 
+            plt.text(np.mean([cluster_bounds[c][CB_RIGHT],cluster_bounds[c][CB_LEFT]]), np.mean([cluster_bounds[c][CB_TOP],cluster_bounds[c][CB_BOTTOM]]), str(c))
+            
+
             last_step_size = current_size
             last_step_lambda = current_lambda
 
@@ -416,9 +419,6 @@ class CondensedTree(object):
         """
         if self._clusters_stability is None : 
             self.compute_stablity()
-
-        print("Stability : ")
-        print(self.clusters_stability)
 
         clusters = _get_selected_clusters(self._raw_tree, self.clusters_stability)
         

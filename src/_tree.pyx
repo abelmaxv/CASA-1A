@@ -281,7 +281,7 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
                 for node in bfs_from_linkage_matrix(linkage_matrix, second_child) :
                     ignore[node] = 1
                     cond_edge.parent = relabelling[current_node]
-                    cond_edge.child = relabelling[node]
+                    cond_edge.child = node
                     cond_edge.lamb_val = lamb_val
                     cond_edge.child_size = 1
 
@@ -295,7 +295,7 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
                 for node in bfs_from_linkage_matrix(linkage_matrix, first_child) :
                     ignore[node] = 1
                     cond_edge.parent = relabelling[current_node]
-                    cond_edge.child = relabelling[node]
+                    cond_edge.child = node
                     cond_edge.lamb_val = lamb_val
                     cond_edge.child_size = 1
 
@@ -307,7 +307,7 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
                 for node in bfs_from_linkage_matrix(linkage_matrix, second_child) :
                     ignore[node] = 1
                     cond_edge.parent = relabelling[current_node]
-                    cond_edge.child = relabelling[node]
+                    cond_edge.child = node
                     cond_edge.lamb_val = lamb_val
                     cond_edge.child_size = 1
 
@@ -318,7 +318,7 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
                 for node in bfs_from_linkage_matrix(linkage_matrix, first_child) :
                     ignore[node] = 1
                     cond_edge.parent = relabelling[current_node]
-                    cond_edge.child = relabelling[node]
+                    cond_edge.child = node
                     cond_edge.lamb_val = lamb_val
                     cond_edge.child_size = 1
 
@@ -391,7 +391,7 @@ cdef char[:] select_clusters (np.ndarray[dtype = cond_edge_t, ndim = 1] condense
         int n_clusters = 2*condensed_tree[0].parent-1
         double[:] relative_stability = np.zeros(n_clusters, dtype = np.double)
         double[:] score = np.zeros(n_clusters, dtype = np.double)
-        char[:] is_selected = np.ones(n_clusters, dtype = np.int8)
+        char[:] is_selected = np.zeros(n_clusters, dtype = np.int8)
         char[:] ancestor_selected = np.zeros(n_clusters, dtype = np.int8)
         cond_edge_t cond_edge
         long child
@@ -406,8 +406,11 @@ cdef char[:] select_clusters (np.ndarray[dtype = cond_edge_t, ndim = 1] condense
         relative_stability[parent] += score[child]
         score[parent] = max(relative_stability[parent], clusters_stability[parent])
 
-        if relative_stability[parent]>clusters_stability[parent]:
+        if relative_stability[parent]>=clusters_stability[parent]:
             is_selected[parent] = 0
+        else : 
+            is_selected[parent] = 1
+
     # Clean the selection array top-to-bottom
     # Do not select the root which is irrelevant
     is_selected[root] = 0
@@ -456,11 +459,10 @@ cdef np.ndarray[dtype = long, ndim = 1] label_of_stability_temp(np.ndarray[dtype
         parent = cond_edge.parent
         child = cond_edge.child
 
-        if is_selected[parent]: 
+        if is_selected[parent]==1: 
             memb_tab_temp[parent] = parent
         
         memb_tab_temp[child] = memb_tab_temp[parent]
-
     memb_tab_temp = memb_tab_temp[:n_nodes]
     return memb_tab_temp
 
@@ -492,7 +494,8 @@ cpdef np.ndarray[dtype = long, ndim = 1] _get_selected_clusters(np.ndarray[dtype
         int cluster_count = 0
         np.ndarray[dtype = long, ndim = 1] cluster_list = np.empty(n_clusters, dtype = np.int_)
         int i
-    
+
+
     # Look for non empty clusters
     for i in range(len(memb_tab_temp)):
         if memb_tab_temp[i] != -1:
@@ -503,7 +506,6 @@ cpdef np.ndarray[dtype = long, ndim = 1] _get_selected_clusters(np.ndarray[dtype
         if size[i]>0:
             cluster_list[cluster_count] = i
             cluster_count+=1
-
     return cluster_list[:cluster_count]
     
     
