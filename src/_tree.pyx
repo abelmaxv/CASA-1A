@@ -259,7 +259,7 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
                 cond_edge1.child = relabelling[first_child]
                 cond_edge1.lamb_val = lamb_val
                 cond_edge1.child_size = first_child_size
-                
+
                 result[edge_count] = cond_edge1
                 edge_count +=1
 
@@ -270,7 +270,7 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
                 cond_edge2.child = relabelling[second_child]
                 cond_edge2.lamb_val = lamb_val
                 cond_edge2.child_size = second_child_size
-
+                
                 result[edge_count] = cond_edge2
                 edge_count +=1
             
@@ -281,47 +281,52 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
                 for node in bfs_from_linkage_matrix(linkage_matrix, second_child) :
                     ignore[node] = 1
                     cond_edge.parent = relabelling[current_node]
-                    cond_edge.child = node
+                    cond_edge.child = relabelling[node]
                     cond_edge.lamb_val = lamb_val
                     cond_edge.child_size = 1
 
-                    result[edge_count] = cond_edge
-                    edge_count +=1
+                    if node < n_nodes : 
+                        result[edge_count] = cond_edge
+                        edge_count +=1
             
+
             elif second_child_size >= min_cluster_size : 
                 relabelling[second_child] = relabelling [current_node]
                 for node in bfs_from_linkage_matrix(linkage_matrix, first_child) :
                     ignore[node] = 1
                     cond_edge.parent = relabelling[current_node]
-                    cond_edge.child = node
+                    cond_edge.child = relabelling[node]
                     cond_edge.lamb_val = lamb_val
                     cond_edge.child_size = 1
 
-                    result[edge_count] = cond_edge
-                    edge_count +=1
+                    if node < n_nodes: 
+                        result[edge_count] = cond_edge
+                        edge_count +=1
 
             else : 
                 for node in bfs_from_linkage_matrix(linkage_matrix, second_child) :
                     ignore[node] = 1
                     cond_edge.parent = relabelling[current_node]
-                    cond_edge.child = node
+                    cond_edge.child = relabelling[node]
                     cond_edge.lamb_val = lamb_val
                     cond_edge.child_size = 1
 
-                    result[edge_count] = cond_edge
-                    edge_count +=1
+                    if node< n_nodes :
+                        result[edge_count] = cond_edge
+                        edge_count +=1
 
                 for node in bfs_from_linkage_matrix(linkage_matrix, first_child) :
                     ignore[node] = 1
                     cond_edge.parent = relabelling[current_node]
-                    cond_edge.child = node
+                    cond_edge.child = relabelling[node]
                     cond_edge.lamb_val = lamb_val
                     cond_edge.child_size = 1
 
-                    result[edge_count] = cond_edge
-                    edge_count +=1                                
-                    
 
+                    if node < n_nodes: 
+                        result[edge_count] = cond_edge
+                        edge_count +=1                            
+            
 
     return np.asarray(result, dtype = cond_edge_dtype)[:edge_count]
 
