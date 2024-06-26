@@ -47,13 +47,14 @@ ox.plot.plot_graph(G, node_color = node_colors, edge_color = "#B0B0B0", bgcolor 
 print("\n \n \n")
 
 # Compute the condensed tree
-print("Computing the condensed tree ... \n")
-clusterer.compute_condensed_tree(min_size=20)
+min_size = 20
+print(f"Computing the condensed tree (min_size {min_size}) ... \n")
+clusterer.compute_condensed_tree(min_size)
 
 # Display the condense tree
 print("Displaying the condensed tree ... \n")
 clusterer.condensed_tree.plot()
-plt.title("Condensed tree of the small model (Meudon, France)")
+plt.title(f"Condensed tree of the small model (Meudon, France) (min_size={min_size})")
 plt.savefig("test/small_test/small_condensed_tree.png")
 plt.close()
 
@@ -66,11 +67,12 @@ print(clustering.mem_tab)
 print("\n")
 print("Sizes of the stability clusters : ")
 print(clustering.size_tab)
+print("\n")
 
 # Displaying clusters in the tree
 print("Displaying clusters in the tree... \n")
 clusterer.condensed_tree.plot(select_clusters = True)
-plt.title("Condensed tree with clusters of the small model (Meudon, France)")
+plt.title(f"Condensed tree with clusters of the small model (Meudon, France)(min_size={min_size})")
 plt.savefig("test/small_test/small_clusters_condensed_tree.png")
 plt.close()
 

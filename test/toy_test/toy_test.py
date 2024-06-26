@@ -90,15 +90,14 @@ plt.close()
 
 
 # Compute the condensed tree
-min_cluster_size = 2
-print(f"Computing the condensed tree with min_cluster_size {min_cluster_size} ... \n")
+min_size = 2
+print(f"Computing the condensed tree with min_cluster_size {min_size} ... \n")
 
 # Display the condensed tree
 print("Displaying the condensed tree ... \n")
-clusterer.compute_condensed_tree(min_cluster_size)
-print(clusterer.condensed_tree._raw_tree)
+clusterer.compute_condensed_tree(min_size)
 clusterer.condensed_tree.plot()
-plt.title("Condensed tree of the toy model")
+plt.title(f"Condensed tree of the toy model (min_size={min_size})")
 plt.savefig("test/toy_test/toy_condensed_tree.png")
 plt.close()
 
@@ -113,7 +112,7 @@ print("\n")
 # Displaying clusters in the tree
 print("Displaying clusters in the tree... \n")
 clusterer.condensed_tree.plot(select_clusters = True)
-plt.title("Condensed tree with clusters of the toy model")
+plt.title(f"Condensed tree with clusters of the toy model (min_size={min_size})")
 plt.savefig("test/toy_test/toy_clusters_condensed_tree.png")
 plt.close()
 
