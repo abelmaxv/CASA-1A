@@ -5,7 +5,7 @@ import numpy as np
 from src.cluster import Clustering
 
 print("import network... \n")
-G = ox.graph_from_place("Modena, Italy", network_type = "drive", simplify = True)
+G = ox.graph_from_place("Meudon, France", network_type = "drive", simplify = True)
 G = nx.convert_node_labels_to_integers(G)
 #ox.plot.plot_graph(G, node_color = '#3F4A99', edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = True, save = False, filepath = "test/small_test/small_clustering.png", close = True)
 
@@ -22,7 +22,7 @@ for i in range(n):
         dist_mat[j,i] = dist_dict[i][j]
 
 print("HDBSCAN... \n")
-clusterer = HDBSCAN(min_cluster_size = 10, metric= "precomputed")
+clusterer = HDBSCAN(min_cluster_size = 20, metric= "precomputed", min_samples = 1)
 clusterer.fit(dist_mat)
 labels = clusterer.labels_
 print(labels)
@@ -35,4 +35,4 @@ print('getting colors ... \n')
 colors = clustering.get_node_colors()
 
 print("displaying the graph... \n")
-ox.plot.plot_graph(G, node_size = 2, node_color = colors, edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = True, save = False, filepath = "test/small_test/small_clustering.png", close = True)
+ox.plot.plot_graph(G, node_color = colors, edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = True, save = False, filepath = "test/small_test/small_clustering.png", close = True)
