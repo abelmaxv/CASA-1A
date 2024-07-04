@@ -48,8 +48,16 @@ class LinkageTree(object):
     - A[i,3] contains the size of the new cluster
     """
     
-    def __init__(self, linkage_matrix):
-        self._linkage_matrix = linkage_matrix
+    def __init__(self, linkage_matrix, path = None):
+        """ If path is not None, the percolation tree may be imported from a csv file
+        """
+        if path != None : 
+            if path[-4:] != ".csv":
+                raise AttributeError("The linkage tree is suppose to be generated from a csv file.")
+            else:
+                self._linkage_matrix = np.loadtxt(path, delimiter=',')
+        else :
+            self._linkage_matrix = linkage_matrix
 
     
     def plot(self, axis=None, truncate_mode=None, p=0, vary_line_width=True,
@@ -166,7 +174,6 @@ class LinkageTree(object):
 
         return axis
 
-
     
     def label_of_cut(self, threshold):
         """ Extract clusters at a given threshold in the linkage tree
@@ -186,3 +193,18 @@ class LinkageTree(object):
         memb_tab, size_tab = _label_of_cut(self._linkage_matrix, threshold)
         clusters = Clustering(memb_tab, size_tab)
         return clusters
+
+
+
+    def save(self, path):
+        """ Save the cluster in a csv file
+        
+        Parameters
+        ----------
+            path : path for location where to save the file
+        """
+        if path[-4:] != ".csv":
+            raise AttributeError("The tree is supposed to be stored in a csv file.")
+        
+        np.savetxt(path, self._linkage_matrix, delimiter=",")
+        return 
