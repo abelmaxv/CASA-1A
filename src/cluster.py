@@ -1,6 +1,7 @@
 import numpy as np
 import networkx as nx
 from matplotlib import colormaps
+from warnings import warn
 
 def _check_format(G, size_tab):
     """ Check if the cluster labelling can be applied on a graph : 
@@ -35,13 +36,22 @@ class Clustering(object):
         mem_tab : membership table of the clustering
 
         size_tab : stores the size of each cluster of the clustering
+
+        cluster_colors : contains color for each cluster
     """
 
-    def __init__(self, mem_tab, size_tab = None):
-        self.mem_tab = mem_tab
+    def __init__(self, mem_tab = None, size_tab = None, cluster_colors = None, mem_path = None, size_path = None, color_path = None):
+        self._mem_tab = mem_tab
         self._size_tab = size_tab
-        self._cluster_colors = None
-
+        self._cluster_colors = cluster_colors
+    
+    @property
+    def cluster_colors(self):
+        if self._mem_tab is None: 
+            raise AttributeError("Membership table was not initialised.")
+        else : 
+            return self._mem_tab
+        
     @property
     def cluster_colors(self):
         if self._cluster_colors is None: 
@@ -155,3 +165,41 @@ class Clustering(object):
         
         return node_colors
     
+
+
+    def save(self, mem_path = None, size_path = None, color_path = None):
+        """ Save the cluster in a csv file
+
+        Parameters 
+        ----------
+            mem_path : path where to store the membership table
+
+            size_path : path where to store the size table
+
+            color_path : path where to store the color table
+        """
+        if mem_path[-4:] != ".csv" or size_path[-4:] != ".csv" or color_path[-4:] != ".csv":
+            raise AttributeError("Clusters are supposed to be stored in csv files.")
+        
+        try :
+            if mem_path != None:
+                mem_tab = self.mem_tab
+                np.savetxt(mem_path, mem_tab) 
+        except AttributeError:
+            warn("No membership table to save ... \n")
+       
+        try :
+            if size_path != None:
+                size_tab = self.size_tab
+                np.savetxt(size_path, size_tab) 
+        except AttributeError:
+            warn("No size table to save ... \n")
+
+        try :
+            if color_path != None:
+                cluster_colors = self.cluster_colors
+                np.savetxt(color_path, cluster_colors ) 
+        except AttributeError:
+            warn("No color table to save ... \n")
+
+        return
