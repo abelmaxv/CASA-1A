@@ -38,12 +38,39 @@ class Clustering(object):
         size_tab : stores the size of each cluster of the clustering
 
         cluster_colors : contains color for each cluster
+
+        mem_path : path to initialise membership table from csv file
+
+        size_path : path to initialise size table from csv file
+
+        color_path : path to initialise color table from csv file
     """
 
     def __init__(self, mem_tab = None, size_tab = None, cluster_colors = None, mem_path = None, size_path = None, color_path = None):
-        self._mem_tab = mem_tab
-        self._size_tab = size_tab
-        self._cluster_colors = cluster_colors
+        if mem_path != None : 
+            if mem_path[-4:] != ".csv":
+                raise AttributeError("The membership table is suppose to be generated from a csv file.")
+            else:
+                self._mem_tab = np.loadtxt(mem_path, delimiter=',')
+        else :
+            self._mem_tab = mem_tab
+
+        if size_path != None : 
+            if size_path[-4:] != ".csv":
+                raise AttributeError("The size table is suppose to be generated from a csv file.")
+            else:
+                self._size_tab = np.loadtxt(size_path, delimiter=',')
+        else :
+            self._size_tab = size_tab
+
+        if color_path != None : 
+            if color_path[-4:] != ".csv":
+                raise AttributeError("The color table is suppose to be generated from a csv file.")
+            else:
+                self._cluster_colors = np.loadtxt(color_path, delimiter=',')
+        else :
+            self._cluster_colors = cluster_colors
+    
     
     @property
     def cluster_colors(self):
@@ -184,21 +211,21 @@ class Clustering(object):
         try :
             if mem_path != None:
                 mem_tab = self.mem_tab
-                np.savetxt(mem_path, mem_tab) 
+                np.savetxt(mem_path, mem_tab, delimiter = ",") 
         except AttributeError:
             warn("No membership table to save ... \n")
        
         try :
             if size_path != None:
                 size_tab = self.size_tab
-                np.savetxt(size_path, size_tab) 
+                np.savetxt(size_path, size_tab, delimiter=",") 
         except AttributeError:
             warn("No size table to save ... \n")
 
         try :
             if color_path != None:
                 cluster_colors = self.cluster_colors
-                np.savetxt(color_path, cluster_colors ) 
+                np.savetxt(color_path, cluster_colors, delimiter=",") 
         except AttributeError:
             warn("No color table to save ... \n")
 
