@@ -51,7 +51,7 @@ class Clustering(object):
             if mem_path[-4:] != ".csv":
                 raise AttributeError("The membership table is suppose to be generated from a csv file.")
             else:
-                self._mem_tab = np.loadtxt(mem_path, delimiter=',')
+                self._mem_tab = np.loadtxt(mem_path, dtype = int, delimiter=',')
         else :
             self._mem_tab = mem_tab
 
@@ -59,7 +59,7 @@ class Clustering(object):
             if size_path[-4:] != ".csv":
                 raise AttributeError("The size table is suppose to be generated from a csv file.")
             else:
-                self._size_tab = np.loadtxt(size_path, delimiter=',')
+                self._size_tab = np.loadtxt(size_path, dtype = int, delimiter=',')
         else :
             self._size_tab = size_tab
 
@@ -67,13 +67,13 @@ class Clustering(object):
             if color_path[-4:] != ".csv":
                 raise AttributeError("The color table is suppose to be generated from a csv file.")
             else:
-                self._cluster_colors = np.loadtxt(color_path, delimiter=',')
+                self._cluster_colors = np.genfromtxt(color_path, dtype=str, delimiter=',', comments=None)
         else :
             self._cluster_colors = cluster_colors
     
     
     @property
-    def cluster_colors(self):
+    def mem_tab(self):
         if self._mem_tab is None: 
             raise AttributeError("Membership table was not initialised.")
         else : 
@@ -225,7 +225,7 @@ class Clustering(object):
         try :
             if color_path != None:
                 cluster_colors = self.cluster_colors
-                np.savetxt(color_path, cluster_colors, delimiter=",") 
+                np.savetxt(color_path, cluster_colors, fmt='%s', delimiter=",") 
         except AttributeError:
             warn("No color table to save ... \n")
 
