@@ -8,8 +8,8 @@ def _check_format(G, size_tab):
     - Nodes must be labelled with integer 0,...,n-1 
     - n must be lower than self.mem_arr.shape[0]
     """
-    if not (isinstance(G, nx.MultiDiGraph)):
-        raise AttributeError("Wrong datatype. Clustering must operate on a networkx.MultiDiGraph object")
+    if not (isinstance(G, nx.MultiDiGraph) or isinstance(G, nx.MultiGraph) or isinstance(G, nx.DiGraph) or isinstance(G, nx.Graph)):
+        raise AttributeError("Wrong datatype. Clustering must operate on a networkx object")
     
     size = G.number_of_nodes()
     for n in G.nodes():

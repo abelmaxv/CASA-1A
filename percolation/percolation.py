@@ -10,8 +10,8 @@ def _checks_format(G):
     - The paramenter is a nx.MultiDiGraph object 
     - Nodes are labeled with integers 0, ..., n-1
     """
-    if not (isinstance(G, nx.MultiDiGraph)):
-        raise AttributeError("Wrong datatype. Percolation must operate on a networkx.MultiDiGraph object")
+    if not (isinstance(G, nx.MultiGraph)) and not(isinstance(G, nx.Graph)):
+        raise AttributeError("Wrong datatype. Percolation must operate on an undirected networkx graph.")
     
     size = G.number_of_nodes()
     for n in G.nodes():
