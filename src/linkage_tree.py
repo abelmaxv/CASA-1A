@@ -1,7 +1,8 @@
 from scipy.cluster.hierarchy import dendrogram
-from ._tree import _label_of_cut
+from ._tree import _label_of_cut, _condensed_tree
 import numpy as np
 from .cluster import Clustering
+from .condensed_tree import CondensedTree
 
 def _get_dendrogram_ordering(parent, linkage, root):
     # COPIED FROM THE HDBSCAN LIBRARY
@@ -48,7 +49,7 @@ class LinkageTree(object):
     - A[i,3] contains the size of the new cluster
     """
     
-    def __init__(self, linkage_matrix, path = None):
+    def __init__(self, linkage_matrix = None, path = None):
         """ If path is not None, the percolation tree may be imported from a csv file
         """
         if path != None : 
@@ -58,6 +59,14 @@ class LinkageTree(object):
                 self._linkage_matrix = np.loadtxt(path, delimiter=',')
         else :
             self._linkage_matrix = linkage_matrix
+
+
+    @property
+    def linkage_matrix (self):
+        if self._linkage_matrix is None : 
+            raise AttributeError("Linkage matrix was not initialised.")
+        else:
+            return self._linkage_matrix
 
     
     def plot(self, axis=None, truncate_mode=None, p=0, vary_line_width=True,
@@ -194,6 +203,11 @@ class LinkageTree(object):
         clusters = Clustering(memb_tab, size_tab)
         return clusters
 
+    def compute_condensed_tree(self, min_size):
+        """TO DO 
+        """
+        linkage_matrix = self.linkage_matrix
+        return CondensedTree(_condensed_tree(linkage_matrix, min_size))
 
 
     def save(self, path):
