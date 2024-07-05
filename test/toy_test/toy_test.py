@@ -12,7 +12,7 @@ network_path = "data/data/networks/toy.gml"
 if path.isfile(network_path):
     G = nx.read_gml(network_path, destringizer= int)
 else : 
-    print("Createing the network ...")
+    print("Creating the network ...")
     import data.data_queries.toy_query
     G = nx.read_gml(network_path, destringizer= int)
 
@@ -41,6 +41,7 @@ print("\n \n \n")
 print("Generating the percolation tree ... \n")
 tree_path = "data/data/percolation_trees/toy_tree.csv"
 if path.isfile(tree_path):
+    print("Percolation tree had already been computed. \n")
     percolation_tree = LinkageTree(path = tree_path)
 else : 
     print("Creating percolation tree ... \n")  

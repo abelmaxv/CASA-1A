@@ -87,7 +87,7 @@ class Percolation:
 
 
     def compute_condensed_tree(self, min_size = 10):
-        """ 
+        """ TO DO
         """
         if self._linkage_tree is None : 
             raise ValueError("Need to compute the linkage tree before extracting pruning tree. Run self.percolate().") 
