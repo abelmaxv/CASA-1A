@@ -2,7 +2,7 @@ import numpy as np
 cimport numpy as np
 
 from src._union_find cimport UnionFind
-from src._graph cimport edge_t, transform_graph
+from src._graph cimport edge_t, transform_graph_nx, transform_graph_pd
 from src._graph import edge_dtype
 
 cdef  np.ndarray[ndim = 2, dtype = double] percolate_edge_list(edge_t[::1] edge_list, int n_nodes):
@@ -82,7 +82,7 @@ cdef np.ndarray[dtype = double, ndim=2] clean_linkage_matrix(np.ndarray[dtype = 
 
 
 
-cpdef np.ndarray[dtype = double, ndim=2] percolate_network(G, str length_attribute):
+cpdef np.ndarray[dtype = double, ndim=2] percolate_network(G, str length_attribute, str data_type):
     """ Computes the percolation algorithm on the a given network output by a osmnx querry.
     
     Parameters  
@@ -90,6 +90,8 @@ cpdef np.ndarray[dtype = double, ndim=2] percolate_network(G, str length_attribu
         G : a networkx MultiDiGraph
 
         length_attribute : name of the weights on edges. By default, for a osmnx network this is 'legnth'
+
+        data_type : data type for the G. "networkx" by defalt, "pandas" otherwise
     
     Returns
     -------
@@ -103,8 +105,12 @@ cpdef np.ndarray[dtype = double, ndim=2] percolate_network(G, str length_attribu
     """
     
     cdef int number_of_nodes = G.number_of_nodes()
-    cdef edge_t[::1] edge_list = transform_graph(G, length_attribute)
+    cdef edge_t[::1] edge_list 
 
+    if data_type == "networkx":
+        edge_list = transform_graph_nx(G, length_attribute)
+    elif data_type == "pandas":
+        edge_list = transform_graph_pd(G, length_attribute)
 
     np_edge_list = np.asarray(edge_list, dtype = edge_dtype)
     #sorting the list of edges

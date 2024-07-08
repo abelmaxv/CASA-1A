@@ -1,17 +1,18 @@
 import networkx as nx
 import numpy as np
+import pandas as pd
 from ._percolation import percolate_network
 from src._tree import _condensed_tree
 from src.linkage_tree import LinkageTree
 from src.condensed_tree import CondensedTree
 
-def _checks_format(G):
+def _checks_format_nx(G):
     """ Checks if the graph given as the right format for the library : 
-    - The paramenter is a nx.MultiDiGraph object 
+    - The paramenter is a networkx undirected object 
     - Nodes are labeled with integers 0, ..., n-1
     """
     if not (isinstance(G, nx.MultiGraph)) and not(isinstance(G, nx.Graph)):
-        raise AttributeError("Wrong datatype. Percolation must operate on an undirected networkx graph.")
+        raise AttributeError("Wrong datatype. Undirected networkx graph was specified.")
     
     size = G.number_of_nodes()
     for n in G.nodes():
@@ -19,6 +20,21 @@ def _checks_format(G):
             raise AttributeError("Nodes must be labeled with ordered integers. Add G = nx.convert_node_labels_to_integers(G) to the script.")
 
 
+def _checks_format_pd(G):
+    """ Checks if the graph given as the right format for the library : 
+    - The paramenter is a panda data frame to list edges 
+    - The columns of the data frame are named "source", "target" 
+
+    WARNING : this function does not check if nodes are labeled with integers 0,..., n-1
+    but the user has to make sure it is
+    """
+    if not (isinstance(G, pd.DataFrame)):
+        raise AttributeError("Wrong datatype. Undirected  pandas DataFrame edge list was specified.")
+    elif G.columns[0] != "source" or G.columns[1] != "target":
+        raise AttributeError("The two first columns of the DataFrame must be source and taget.")
+
+
+    
 
 class Percolation: 
     """ This is a class to implement the percolation algorithm. 
@@ -62,14 +78,16 @@ class Percolation:
             return CondensedTree(self._condensed_tree)
         
 
-    def percolate(self, G, length_attribute = "length"):
+    def percolate(self, G, length_attribute = "length", data_type = "networkx"):
         """ Computes the percolation algorithm on the a given network output by a osmnx querry.
     
         Parameters  
         ----------
-            G : a networkx MultiDiGraph
+            G : a networkx graph or an Pandas Data frame of edges (source, target, length)
 
             length_attribute : name of the weights on edges. By default, for a osmnx network this is 'legnth'
+
+            data_type : data type for the G. "networkx" by defalt, "pandas" otherwise
         
         Returns
         -------
@@ -79,10 +97,14 @@ class Percolation:
         - A[i,0] and A[i,1] are the names of the merged clusters at step i
         - A[i,2] contains the length of the link that merged the two clusters
         - A[i,3] contains the size of the new cluster
-
         """
-        _checks_format(G)
-        self._linkage_tree = percolate_network(G, length_attribute)
+        if data_type == "networkx":
+            _checks_format_nx(G)
+        elif data_type == "pandas":
+            _checks_format_pd(G)
+        else : 
+            raise AttributeError("Wrong data type specified for the graph.")
+        self._linkage_tree = percolate_network(G, length_attribute, data_type)
         return self
 
 

@@ -6,15 +6,37 @@ edge_dtype = np.dtype([
     ("first_node", np.int_),
     ("second_node", np.int_),
     ("distance", np.single)
-]) 
+])
 
-cdef edge_t[::1] transform_graph(G, str length_attribute):
-    """ Transforms a networkx.MultiDiGraph in a MemoryView of edge_t that
+cdef edge_t[::1] transform_graph_pd(G, str length_attribute):
+    """ Transforms a pandas DataFrame in a MemoryView of edge_t that
     represents the same graph.
 
     Parameters
     ----------
-        G : a networkx MultiDiGraph
+        G : pandas DataFrame that represent an edge list.
+
+        length_attribute : name of the weights on edges. By default, for a osmnx network this is 'legnth'.
+    """
+    cdef int number_of_edges = G.number_of_edges()
+    cdef edge_t[::1] edge_array = np.zeros(number_of_edges, dtype=edge_dtype)
+    cdef int i = 0
+
+    for i in range(number_of_edges):
+        edge_array[i].first_node = G['source'][i]
+        edge_array[i].second_node = G['target'][i]
+        edge_array[i].distance = G[length_attribute]
+
+    return edge_array
+
+
+cdef edge_t[::1] transform_graph_nx(G, str length_attribute):
+    """ Transforms a networkx undirected graph in a MemoryView of edge_t that
+    represents the same graph.
+
+    Parameters
+    ----------
+        G : a networkx undirected graph.
 
         length_attribute : name of the weights on edges. By default, for a osmnx network this is 'legnth'.
     """
