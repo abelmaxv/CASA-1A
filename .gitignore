@@ -172,6 +172,7 @@ cache/
 data/data/clusters/*
 data/data/networks/*
 data/data/percolation_tree/*
+data/raw_data/*
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
