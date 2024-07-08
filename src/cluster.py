@@ -22,9 +22,20 @@ def _check_format(G, size_tab):
 
 
 def _convert_to_hex(color):
-    """ Converts a color in the forma RGB to a color in rhe format hex.
+    """Converts a color in the format RGBA to a color in the format hex.
+    
+    Args:
+        color (tuple): A tuple containing four elements (R, G, B, A) each ranging from 0 to 1.
+        
+    Returns:
+        str: The hex representation of the color.
     """
-    return '#'+ hex(round(256*color[0]))[2:3] + hex(round(256*color[1]))[2:3] + hex(round(256*color[2]))[2:3]
+    r = round(255 * color[0])
+    g = round(255 * color[1])
+    b = round(255 * color[2])
+    a = round(255 * color[3])
+    
+    return '#{:02X}{:02X}{:02X}{:02X}'.format(r, g, b, a)
 
 
 
