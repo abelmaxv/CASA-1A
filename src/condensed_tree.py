@@ -47,9 +47,22 @@ class CondensedTree(object):
         - s size of the child
     """
 
-    def __init__(self, raw_tree):
-        self._raw_tree = raw_tree
+    def __init__(self, raw_tree = None, path = None):
+        if path != None : 
+            if path[-4:] != ".npy":
+                raise AttributeError("The linkage tree is suppose to be generated from a csv file.")
+            else:
+                self._raw_tree = np.load(path)
+        else :
+            self._raw_tree = raw_tree
         self._clusters_stability = None
+
+    @property
+    def raw_tree(self):
+        if self._raw_tree is None :
+            raise AttributeError("Raw tree has not been initialised")
+        else :
+            return self._raw_tree
 
     @property
     def clusters_stability(self):
@@ -439,4 +452,17 @@ class CondensedTree(object):
         mem_tab, size_tab = _label_of_stability(self._raw_tree, self._clusters_stability)
         clusters = Clustering(mem_tab, size_tab)
         return clusters
+    
+    def save(self, path):
+        """ Save the cluster in a npy file
+        
+        Parameters
+        ----------
+            path : path for location where to save the file
+        """
+        if path[-4:] != ".npy":
+            raise AttributeError("The tree is supposed to be stored in a npy file.")
+        else : 
+            np.save(path, self.raw_tree)   
+        return 
 
