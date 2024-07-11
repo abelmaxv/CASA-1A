@@ -4,6 +4,7 @@ from os import path, makedirs
 from percolation.percolation import Percolation
 from src.linkage_tree import LinkageTree
 from src.cluster import Clustering
+from src.condensed_tree import CondensedTree
 
 # Importing the toy model
 print("Importing the network ... \n")
@@ -39,7 +40,7 @@ print("\n \n \n")
 
 # Generate the percolation tree :
 print("Generating the percolation tree ... \n")
-tree_path = "data/data/percolation_trees/toy_tree.csv"
+tree_path = "data/data/percolation_trees/toy_tree.npy"
 if path.isfile(tree_path):
     print("Percolation tree had already been computed. \n")
     percolation_tree = LinkageTree(path = tree_path)
@@ -75,12 +76,12 @@ cluster_path = "data/data/clusters/toy/cut/" + str(threshold) + "/"
 
 if path.exists(cluster_path):
     print(f"Cut at threshold {threshold} had already been computed.")
-    clustering = Clustering(mem_path= cluster_path + "mem.csv", size_path= cluster_path + "size.csv", color_path= cluster_path + "color.csv")
+    clustering = Clustering(mem_path= cluster_path + "mem.npy", size_path= cluster_path + "size.npy", color_path= cluster_path + "color.csv")
 else :
     makedirs(cluster_path)
     clustering = percolation_tree.label_of_cut(threshold)
     clustering.get_cluster_colors()
-    clustering.save(mem_path= cluster_path + "mem.csv", size_path= cluster_path + "size.csv", color_path= cluster_path + "color.csv")
+    clustering.save(mem_path= cluster_path + "mem.npy", size_path= cluster_path + "size.npy", color_path= cluster_path + "color.csv")
 
 print(f"Membership table of the clustering with treshold {threshold} :")
 print(clustering.mem_tab)
@@ -113,8 +114,15 @@ print("\n \n \n")
 
 # Compute the condensed tree
 min_size = 2
-print(f"Computing the condensed tree with min_cluster_size {min_size} ... \n")
-condensed_tree = percolation_tree.compute_condensed_tree(min_size)
+print(f"Handling the condensed tree with min_cluster_size {min_size} ... \n")
+condensed_tree_path = "data/data/condensed_trees/toy/" + str(min_size) + "/"
+if path.exists(condensed_tree_path):
+    condensed_tree = CondensedTree(path = condensed_tree_path + "/toy_condensed_tree" + str(min_size) + ".npy")
+else : 
+    print("Computing the condensed tree ... \n")
+    makedirs(condensed_tree_path)
+    condensed_tree = percolation_tree.compute_condensed_tree(min_size=min_size)
+    condensed_tree.save(condensed_tree_path + "/toy_condensed_tree" + str(min_size) + ".npy")
 
 
 # Display the condensed tree
@@ -139,12 +147,12 @@ print("Computing stability clusters ... \n")
 cluster_path = "data/data/clusters/toy/stability/" + str(min_size) + "/"
 if path.exists(cluster_path):
     print(f"Stability clusters with min_size {min_size} had already been computed.")
-    clustering = Clustering(mem_path= cluster_path + "mem.csv", size_path= cluster_path + "size.csv", color_path= cluster_path + "color.csv")
+    clustering = Clustering(mem_path= cluster_path + "mem.npy", size_path= cluster_path + "size.npy", color_path= cluster_path + "color.csv")
 else :
     makedirs(cluster_path)
     clustering = condensed_tree.label_of_stability()
     clustering.get_cluster_colors()
-    clustering.save(mem_path= cluster_path + "mem.csv", size_path= cluster_path + "size.csv", color_path= cluster_path + "color.csv")
+    clustering.save(mem_path= cluster_path + "mem.npy", size_path= cluster_path + "size.npy", color_path= cluster_path + "color.csv")
 
 print(f"Membership table of the stability clustering  with min_size {min_size}: ")
 print(clustering.mem_tab)
