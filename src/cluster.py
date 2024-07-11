@@ -59,18 +59,18 @@ class Clustering(object):
 
     def __init__(self, mem_tab = None, size_tab = None, cluster_colors = None, mem_path = None, size_path = None, color_path = None):
         if mem_path != None : 
-            if mem_path[-4:] != ".csv":
+            if mem_path[-4:] != ".npy":
                 raise AttributeError("The membership table is suppose to be generated from a csv file.")
             else:
-                self._mem_tab = np.loadtxt(mem_path, dtype = int, delimiter=',')
+                self._mem_tab = np.load(mem_path)
         else :
             self._mem_tab = mem_tab
 
         if size_path != None : 
-            if size_path[-4:] != ".csv":
+            if size_path[-4:] != ".npy":
                 raise AttributeError("The size table is suppose to be generated from a csv file.")
             else:
-                self._size_tab = np.loadtxt(size_path, dtype = int, delimiter=',')
+                self._size_tab = np.load(size_path)
         else :
             self._size_tab = size_tab
 
@@ -216,20 +216,18 @@ class Clustering(object):
 
             color_path : path where to store the color table
         """
-        if mem_path[-4:] != ".csv" or size_path[-4:] != ".csv" or color_path[-4:] != ".csv":
-            raise AttributeError("Clusters are supposed to be stored in csv files.")
+        if mem_path[-4:] != ".npy" or size_path[-4:] != ".npy" or color_path[-4:] != ".csv":
+            raise AttributeError("Wrong file formats for saving.")
         
         try :
             if mem_path != None:
-                mem_tab = self.mem_tab
-                np.savetxt(mem_path, mem_tab, delimiter = ",") 
+                np.save(mem_path, self.mem_tab) 
         except AttributeError:
             warn("No membership table to save ... \n")
        
         try :
             if size_path != None:
-                size_tab = self.size_tab
-                np.savetxt(size_path, size_tab, delimiter=",") 
+                np.save(size_path, self.size_tab) 
         except AttributeError:
             warn("No size table to save ... \n")
 
