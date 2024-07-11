@@ -31,8 +31,8 @@ cdef tuple clean_memb_tab(long[:] memb_tab_temp):
     cdef : 
         int n_nodes = len(memb_tab_temp)
         long next_label = 0
-        long[:] clusters_id = np.zeros(2*n_nodes-1, dtype = np.int_)
-        np.ndarray[dtype = int, ndim =1] size_tab = np.zeros(2*n_nodes, dtype = np.intc)
+        np.ndarray[dtype = long, ndim = 1] clusters_id = np.zeros(2*n_nodes-1, dtype = np.int_)
+        np.ndarray[dtype = long, ndim = 1] size_tab = np.zeros(2*n_nodes, dtype = np.int_)
         np.ndarray[dtype = long, ndim = 1] memb_tab = np.asarray(memb_tab_temp, dtype = np.int_)
         np.ndarray[dtype = long, ndim = 1] memb_tab_temp_np = np.asarray(memb_tab_temp, dtype = np.int_)
         int i = 0
@@ -87,7 +87,7 @@ cpdef tuple _label_of_cut(np.ndarray[dtype = double, ndim = 2] linkage_matrix, d
         UnionFind U = UnionFind(n_nodes)
         long[:] memb_tab_temp = np.zeros(n_nodes, dtype = long) 
         np.ndarray[dtype = long, ndim = 1] memb_tab 
-        np.ndarray[dtype = int, ndim = 1] size_tab 
+        np.ndarray[dtype = long, ndim = 1] size_tab 
 
     pbar = tqdm(total = linkage_matrix[threshold >= linkage_matrix[:,2]].shape[0] + n_nodes) 
     # Computes the percolation until the thershold is reached
@@ -492,7 +492,7 @@ cpdef tuple _label_of_stability(np.ndarray[dtype = cond_edge_t, ndim = 1] conden
         char[:] is_selected = select_clusters(condensed_tree, clusters_stability)
         long[:] memb_tab_temp = label_of_stability_temp(condensed_tree, is_selected)
         np.ndarray[dtype=long, ndim = 1] memb_tab
-        np.ndarray[dtype = int, ndim =1] size_tab
+        np.ndarray[dtype = long, ndim =1] size_tab
 
     memb_tab, size_tab = clean_memb_tab(memb_tab_temp)
 
@@ -516,7 +516,7 @@ cpdef np.ndarray[dtype = long, ndim = 1] _get_selected_clusters(np.ndarray[dtype
         char[:] is_selected = select_clusters(condensed_tree, clusters_stability)
         long[:] memb_tab_temp = label_of_stability_temp(condensed_tree, is_selected)
         int n_clusters = 2*condensed_tree[0].parent -1
-        int[:] size = np.zeros(n_clusters, dtype = np.intc)
+        long[:] size = np.zeros(n_clusters, dtype = np.int_)
         int cluster_count = 0
         np.ndarray[dtype = long, ndim = 1] cluster_list = np.empty(n_clusters, dtype = np.int_)
         int i
