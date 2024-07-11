@@ -426,7 +426,12 @@ class CondensedTree(object):
             return axis
     
     def _select_clusters(self): 
-        """ TO DO
+        """ Computes the clusters based on the stability method
+
+        Parameters
+        ----------
+
+        Returns
         """
         if self._clusters_stability is None : 
             self.compute_stablity()
@@ -437,14 +442,14 @@ class CondensedTree(object):
 
 
     def compute_stablity(self):
-        """ TO DO
+        """ Comutes the stability array of the clusters
         """
         self._clusters_stability = _compute_stability(self._raw_tree)
         return self 
 
 
     def label_of_stability(self):
-        """ TO DO
+        """ Extract the clusters with the stability method
         """
         if self._clusters_stability is None : 
             self.compute_stablity()
