@@ -475,7 +475,17 @@ cdef np.ndarray[dtype = long, ndim = 1] label_of_stability_temp(np.ndarray[dtype
 
 
 cpdef tuple _label_of_stability(np.ndarray[dtype = cond_edge_t, ndim = 1] condensed_tree, np.ndarray[dtype = double, ndim = 1] clusters_stability):
-    """ TO DO 
+    """ Selects the clusters based on the stability method 
+
+    Parameters 
+    ----------
+        condensed_tree : np.ndarray that respresents the result of the runt pruning procedure on the linkage tree
+
+        clusters_stability : a np.ndarray that stores the stability score for all the clusters in the tree
+
+    Returns
+    -------
+        mem_tab, siz_tab : membership table and size table of the corresponding clustering
     """
     cdef : 
         char[:] is_selected = select_clusters(condensed_tree, clusters_stability)
@@ -489,7 +499,17 @@ cpdef tuple _label_of_stability(np.ndarray[dtype = cond_edge_t, ndim = 1] conden
 
 
 cpdef np.ndarray[dtype = long, ndim = 1] _get_selected_clusters(np.ndarray[dtype = cond_edge_t, ndim = 1] condensed_tree, np.ndarray[dtype = double, ndim = 1] clusters_stability):
-    """ TO DO
+    """  Selects the clusters based on the stability method 
+
+    Parameters 
+    ----------
+        condensed_tree : np.ndarray that respresents the result of the runt pruning procedure on the linkage tree
+
+        clusters_stability : a np.ndarray that stores the stability score for all the clusters in the tree
+
+    Returns
+    -------
+        cluster_lit : the list of clusters
     """
     cdef : 
         char[:] is_selected = select_clusters(condensed_tree, clusters_stability)
