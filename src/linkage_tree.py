@@ -204,7 +204,15 @@ class LinkageTree(object):
         return clusters
 
     def compute_condensed_tree(self, min_size):
-        """TO DO 
+        """ Computes the condensed tree based on the runt prunning method
+
+        Parameters 
+        ----------
+            min_size : the minimum size parameter of the runt prunning method 
+        
+        Returns
+        -------
+            A condensed tree object
         """
         linkage_matrix = self.linkage_matrix
         return CondensedTree(_condensed_tree(linkage_matrix, min_size))
