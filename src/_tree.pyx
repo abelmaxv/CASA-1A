@@ -87,9 +87,11 @@ cpdef tuple _label_of_cut(np.ndarray[dtype = double, ndim = 2] linkage_matrix, d
         long[:] memb_tab_temp = np.zeros(n_nodes, dtype = long) 
         np.ndarray[dtype = long, ndim = 1] memb_tab 
         np.ndarray[dtype = int, ndim = 1] size_tab 
-        
+
+    pbar = tqdm(total = linkage_matrix[threshold >= linkage_matrix[:,2]].shape[0] + n_nodes) 
     # Computes the percolation until the thershold is reached
     while threshold >= linkage_matrix[i,2] and i < linkage_matrix.shape[0]  :
+        pbar.update(1)
         current_node = <long> linkage_matrix[i,0]
         next_node = <long> linkage_matrix[i,1]
         distance = linkage_matrix[i,2]
@@ -98,10 +100,11 @@ cpdef tuple _label_of_cut(np.ndarray[dtype = double, ndim = 2] linkage_matrix, d
         i+=1
 
     for i in range(n_nodes):
+        pbar.update(1)
         memb_tab_temp[i] = U.fast_find(i)
 
     memb_tab, size_tab = clean_memb_tab(memb_tab_temp)
-
+    pbar.close()
     return memb_tab, size_tab
 
 
@@ -211,10 +214,11 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
     relabelling[root] = next_label
     next_label+=1
 
+    pbar = tqbm(total = n_nodes + linkage_matrix.shape[0])
 
     # Important to treate clusters in the bfs order
     for current_node in bfs_from_linkage_matrix(linkage_matrix, root):
-
+        pbar.update(1)
         if ignore[current_node] == 0 and current_node >= n_nodes: 
 
             # Setting the variables
@@ -315,7 +319,7 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
                         result[edge_count] = cond_edge
                         edge_count +=1                            
             
-
+    pbar.close()
     return np.asarray(result, dtype = cond_edge_dtype)[:edge_count]
 
 
@@ -345,7 +349,10 @@ cpdef np.ndarray[dtype = double, ndim = 1] _compute_stability(np.ndarray[dtype =
         long child_size
 
     # Edges of the condensed_tree are given in bfs order
-    for current_edge in condensed_tree : 
+
+    pbar = tqbm(total = condensed_tree.shape[0])
+    for current_edge in condensed_tree :
+        pbar.update(1) 
         parent = current_edge.parent
         child = current_edge.child
         lamb_val = current_edge.lamb_val
@@ -355,7 +362,7 @@ cpdef np.ndarray[dtype = double, ndim = 1] _compute_stability(np.ndarray[dtype =
             birth[child] = lamb_val
         
         clusters_stability[parent] += (lamb_val - birth[parent])*child_size
-
+    pbar.close()
     return clusters_stability
 
 
@@ -386,8 +393,13 @@ cdef char[:] select_clusters (np.ndarray[dtype = cond_edge_t, ndim = 1] condense
         long parent
         long root = condensed_tree[0].parent
 
+    pbar = tqbm(total = 2*condensed_tree.shape[0])
+
     # Computing score of each cluster and selection array bottom-up
     for cond_edge in condensed_tree[::-1] :
+
+        pbar.update(1)
+
         child = cond_edge.child
         parent = cond_edge.parent
 
@@ -404,6 +416,8 @@ cdef char[:] select_clusters (np.ndarray[dtype = cond_edge_t, ndim = 1] condense
     is_selected[root] = 0
     for cond_edge in condensed_tree : 
         
+        pbar.update(1)
+
         child = cond_edge.child
         parent = cond_edge.parent
 
@@ -415,6 +429,9 @@ cdef char[:] select_clusters (np.ndarray[dtype = cond_edge_t, ndim = 1] condense
         elif is_selected[parent] == 1:
             ancestor_selected[child] = 1
             is_selected[child] = 0
+
+    pbar.close()
+    
     return is_selected
     
     
