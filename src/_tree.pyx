@@ -34,10 +34,11 @@ cdef tuple clean_memb_tab(long[:] memb_tab_temp):
         long[:] clusters_id = np.zeros(2*n_nodes-1, dtype = np.int_)
         np.ndarray[dtype = int, ndim =1] size_tab = np.zeros(2*n_nodes, dtype = np.intc)
         np.ndarray[dtype = long, ndim = 1] memb_tab = np.asarray(memb_tab_temp, dtype = np.int_)
+        np.ndarray[dtype = long, ndim = 1] memb_tab_temp_np = np.asarray(memb_tab_temp, dtype = np.int_)
         int i = 0
     
     # Computing size table
-    size_tab = np.bincount(memb_tab_temp[memb_tab_temp != -1], minlength=2*n_nodes-1)
+    size_tab = np.bincount(memb_tab_temp_np[memb_tab_temp_np != -1], minlength=2*n_nodes-1)
 
 
     # Assigning cluster id
@@ -47,7 +48,7 @@ cdef tuple clean_memb_tab(long[:] memb_tab_temp):
             next_label+=1
     
     # Relabelling in membership_table
-    memb_tab = np.where(memb_tab_temp == -1, -1, clusters_id[memb_tab_temp])
+    memb_tab = np.where(memb_tab_temp_np == -1, -1, clusters_id[memb_tab_temp_np])
 
     # Cleanning size_table 
     size_tab = size_tab[size_tab!=0]
@@ -214,7 +215,7 @@ cpdef np.ndarray[dtype = cond_edge_t, ndim = 1] _condensed_tree (np.ndarray[dtyp
     relabelling[root] = next_label
     next_label+=1
 
-    pbar = tqbm(total = n_nodes + linkage_matrix.shape[0])
+    pbar = tqdm(total = n_nodes + linkage_matrix.shape[0])
 
     # Important to treate clusters in the bfs order
     for current_node in bfs_from_linkage_matrix(linkage_matrix, root):
@@ -350,7 +351,7 @@ cpdef np.ndarray[dtype = double, ndim = 1] _compute_stability(np.ndarray[dtype =
 
     # Edges of the condensed_tree are given in bfs order
 
-    pbar = tqbm(total = condensed_tree.shape[0])
+    pbar = tqdm(total = condensed_tree.shape[0])
     for current_edge in condensed_tree :
         pbar.update(1) 
         parent = current_edge.parent
@@ -393,7 +394,7 @@ cdef char[:] select_clusters (np.ndarray[dtype = cond_edge_t, ndim = 1] condense
         long parent
         long root = condensed_tree[0].parent
 
-    pbar = tqbm(total = 2*condensed_tree.shape[0])
+    pbar = tqdm(total = 2*condensed_tree.shape[0])
 
     # Computing score of each cluster and selection array bottom-up
     for cond_edge in condensed_tree[::-1] :
