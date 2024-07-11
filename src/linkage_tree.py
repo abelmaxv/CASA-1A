@@ -220,5 +220,5 @@ class LinkageTree(object):
         if path[-4:] != ".npy":
             raise AttributeError("The tree is supposed to be stored in a npy file.")
         
-        np.save(path)
+        np.save(path, self.linkage_matrix)
         return 
