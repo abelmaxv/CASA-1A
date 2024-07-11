@@ -18,7 +18,7 @@ cdef edge_t[::1] transform_graph_pd(G, str length_attribute):
 
         length_attribute : name of the weights on edges. By default, for a osmnx network this is 'legnth'.
     """
-    cdef int number_of_edges = G.number_of_edges()
+    cdef int number_of_edges = max(G["source"].max(),G["target"].max())+1
     cdef edge_t[::1] edge_array = np.zeros(number_of_edges, dtype=edge_dtype)
     cdef int i = 0
 
