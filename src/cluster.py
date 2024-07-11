@@ -2,6 +2,17 @@ import numpy as np
 import networkx as nx
 from matplotlib import colormaps
 from warnings import warn
+import pandas as pd
+
+def _check_format_pd(G):
+    """ Check if the cluster labelling can be applied on a graph : 
+    G must be a pandas Dataframe with a node column 
+    """
+    if not (isinstance(G),pd.DataFrame):
+        raise AttributeError("Wrong datatype. Clustering must operate on a networkx object or specify pandas")
+    elif not ("node" in G.columns):
+        raise AttributeError("The DataFrame must have a node column.")
+
 
 def _check_format(G, size_tab):
     """ Check if the cluster labelling can be applied on a graph : 
@@ -128,12 +139,16 @@ class Clustering(object):
             clusters_dict[i] = self.mem_tab[i]
         return clusters_dict
     
-    def add_clusters_to_graph(self, G):
+    def add_clusters_to_graph(self, G, datatype = "networkx"):
         """ Adds the cluster labelling to the nodes attributes of a graph
         """
-        _check_format(G, self.mem_tab.shape[0])
-        clusters_dict = self.clusters_to_dict()
-        nx.set_node_attributes(G, clusters_dict, 'cluster')
+        if datatype == "networkx":
+            _check_format(G, self.mem_tab.shape[0])
+            clusters_dict = self.clusters_to_dict()
+            nx.set_node_attributes(G, clusters_dict, 'cluster')
+        elif datatype == "pandas":
+            _check_format_pd(G)
+            G["cluster"] = G["node"].apply(lambda x : self.mem_tab[x])
 
     def get_cluster_colors(self, cmap = "plasma", start = 0, stop = 1, min_size = 0, default = "#8C8C8C"):
         """ Generate a color palatte with one color for each cluster
