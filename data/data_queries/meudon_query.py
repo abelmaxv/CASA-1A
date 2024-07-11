@@ -15,5 +15,5 @@ G = G.to_undirected()
 
 #Saving the network 
 print("Saving the network... \n")
-ox.save_graphml(G, "data/data/networks/small.gml")
+ox.save_graphml(G, "data/data/networks/meudon.gml")
 
