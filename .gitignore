@@ -171,7 +171,8 @@ cache/
 
 data/data/clusters/*
 data/data/networks/*
-data/data/percolation_tree/*
+data/data/percolation_trees/*
+data/data/condensed_trees/*
 data/raw_data/*
 
 # PyCharm
