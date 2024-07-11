@@ -112,7 +112,7 @@ cpdef np.ndarray[dtype = double, ndim=2] percolate_network(G, str length_attribu
 
     if data_type == "networkx":
         edge_list = transform_graph_nx(G, length_attribute)
-        number_of_nodes =  = G.number_of_nodes()
+        number_of_nodes =  G.number_of_nodes()
     elif data_type == "pandas":
         edge_list = transform_graph_pd(G, length_attribute)
         number_of_nodes = max(G["source"].max(), G["target"].max())+1
