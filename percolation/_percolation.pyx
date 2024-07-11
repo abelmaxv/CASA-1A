@@ -5,6 +5,8 @@ from src._union_find cimport UnionFind
 from src._graph cimport edge_t, transform_graph_nx, transform_graph_pd
 from src._graph import edge_dtype
 
+from tqdm import tqdm
+
 cdef  np.ndarray[ndim = 2, dtype = double] percolate_edge_list(edge_t[::1] edge_list, int n_nodes):
     """ Computes the percolation algorithm on the edge list of a given network.
     
@@ -36,8 +38,12 @@ cdef  np.ndarray[ndim = 2, dtype = double] percolate_edge_list(edge_t[::1] edge_
         UnionFind U = UnionFind(n_nodes)
         np.ndarray[ndim = 2, dtype = double] linkage_matrix = np.zeros((n_samples,4), dtype = np.double)
 
+    pbar = tqdm(total = n_samples)
+
     for i in range(n_samples):
 
+        pbar.update(1)
+        
         current_node = edge_list[i].first_node
         next_node = edge_list[i].second_node
         distance = edge_list[i].distance
@@ -53,6 +59,7 @@ cdef  np.ndarray[ndim = 2, dtype = double] percolate_edge_list(edge_t[::1] edge_
 
         U.union(current_node_cluster, next_node_cluster)
 
+    pbar.close()
     return linkage_matrix
 
 
@@ -73,11 +80,7 @@ cdef np.ndarray[dtype = double, ndim=2] clean_linkage_matrix(np.ndarray[dtype = 
     """
 
     cdef int i = 0
-    while i < linkage_matrix.shape[0]:
-        if linkage_matrix[i, 0] == linkage_matrix[i,1]:
-            linkage_matrix = np.delete(linkage_matrix, i, axis= 0)
-        else: 
-            i+=1
+    linkage_matrix = linkage_matrix[linkage_matrix[:, 0] != linkage_matrix[:, 1]]
     return linkage_matrix
 
 
