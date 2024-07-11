@@ -25,7 +25,7 @@ cdef edge_t[::1] transform_graph_pd(G, str length_attribute):
     for i in range(number_of_edges):
         edge_array[i].first_node = G['source'][i]
         edge_array[i].second_node = G['target'][i]
-        edge_array[i].distance = G[length_attribute]
+        edge_array[i].distance = G[length_attribute][i]
 
     return edge_array
 
