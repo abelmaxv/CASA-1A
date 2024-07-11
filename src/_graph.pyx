@@ -1,6 +1,6 @@
 import numpy as np
 cimport numpy as np
-
+from tqdm import tqdm
 
 edge_dtype = np.dtype([
     ("first_node", np.int_),
@@ -19,13 +19,12 @@ cdef edge_t[::1] transform_graph_pd(G, str length_attribute):
         length_attribute : name of the weights on edges. By default, for a osmnx network this is 'legnth'.
     """
     cdef int number_of_edges = max(G["source"].max(),G["target"].max())+1
-    cdef edge_t[::1] edge_array = np.zeros(number_of_edges, dtype=edge_dtype)
+    cdef np.ndarray[ndim =1, dtype = edge_t] edge_array = np.empty(G.shape[0], dtype = edge_dtype, order = "C")
     cdef int i = 0
 
-    for i in range(number_of_edges):
-        edge_array[i].first_node = G['source'][i]
-        edge_array[i].second_node = G['target'][i]
-        edge_array[i].distance = G[length_attribute][i]
+    edge_array["first_node"] = G["source"]
+    edge_array["second_node"] = G["target"]
+    edge_array["distance"] = G[length_attribute]
 
     return edge_array
 
