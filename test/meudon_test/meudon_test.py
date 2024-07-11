@@ -175,5 +175,5 @@ if path.isfile(stability_display_path) :
 else : 
     clustering.add_clusters_to_graph(G)
     node_colors = clustering.get_node_colors()
-    ox.plot.plot_graph(G, node_color = node_colors, edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = False, save = True, filepath = cut_display_path, close = True)
+    ox.plot.plot_graph(G, node_color = node_colors, edge_color = "#B0B0B0", bgcolor = '#FFFFFF', show = False, save = True, filepath = stability_display_path, close = True)
 
