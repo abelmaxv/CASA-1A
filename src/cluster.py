@@ -149,6 +149,7 @@ class Clustering(object):
         elif data_type == "pandas":
             _check_format_pd(G)
             G["cluster"] = G["node"].apply(lambda x : self.mem_tab[x])
+            G['cluster'] = pd.Categorical(G['cluster'])
 
     def get_cluster_colors(self, cmap = "plasma", start = 0, stop = 1, min_size = 0, default = "#8C8C8C"):
         """ Generate a color palatte with one color for each cluster
