@@ -55,11 +55,7 @@ cdef tuple clean_memb_tab(long[:] memb_tab_temp):
     
     # Cleanning size_table 
     i = 0
-    while i < size_tab.shape[0] :
-        if size_tab[i] == 0 : 
-            size_tab = np.delete(size_tab, i, axis = 0)
-        else :
-            i+=1
+    size_tab = size_tab[size_tab!=0]
     
     return memb_tab, size_tab
 
@@ -103,10 +99,7 @@ cpdef tuple _label_of_cut(np.ndarray[dtype = double, ndim = 2] linkage_matrix, d
         next_node = <long> linkage_matrix[i,1]
         distance = linkage_matrix[i,2]
 
-        current_node_cluster = U.fast_find(current_node)
-        next_node_cluster = U.fast_find(next_node)
-
-        U.union(current_node_cluster, next_node_cluster)
+        U.union(current_node, next_node)
         i+=1
 
     for i in range(n_nodes):
@@ -133,14 +126,14 @@ cdef np.ndarray[dtype = long, ndim = 1] bfs_from_linkage_matrix(np.ndarray[dtype
     """
     cdef : 
         int n_nodes = linkage_matrix.shape[0]+1
-        long[:] to_process = np.zeros(n_nodes+ linkage_matrix.shape[0], dtype = np.int_)
+        long[:] to_process = np.empty(n_nodes+ linkage_matrix.shape[0], dtype = np.int_)
         long current_node
         long first_child
         long second_child
         # Pointers to make a queue out of to_process
         int start = 0
         int end = 1 
-        np.ndarray[dtype = long, ndim = 1] result = np.zeros(n_nodes + linkage_matrix.shape[0], dtype = np.int_)
+        np.ndarray[dtype = long, ndim = 1] result = np.empty(n_nodes + linkage_matrix.shape[0], dtype = np.int_)
         # To trucate the result array at the end
         int nb_results = 0
 
