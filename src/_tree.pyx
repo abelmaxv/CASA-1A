@@ -3,6 +3,7 @@ cimport numpy as np
 
 from ._union_find import UnionFind
 from ._union_find cimport UnionFind
+from tqdm import tqdm 
 
 cdef np.double_t INFTY = np.inf
 
@@ -36,9 +37,8 @@ cdef tuple clean_memb_tab(long[:] memb_tab_temp):
         int i = 0
     
     # Computing size table
-    for i in range(n_nodes):
-        if memb_tab_temp[i] != -1 : 
-            size_tab[memb_tab_temp[i]] = size_tab[memb_tab_temp[i]]+1
+    size_tab = np.bincount(memb_tab_temp[memb_tab_temp != -1], minlength=2*n_nodes-1)
+
 
     # Assigning cluster id
     for i in range(2*n_nodes-1):
@@ -47,14 +47,9 @@ cdef tuple clean_memb_tab(long[:] memb_tab_temp):
             next_label+=1
     
     # Relabelling in membership_table
-    for i in range(n_nodes):
-        if memb_tab_temp[i] == -1 : 
-            memb_tab[i] = -1
-        else: 
-            memb_tab[i] = clusters_id[memb_tab[i]]
-    
+    memb_tab = np.where(memb_tab_temp == -1, -1, clusters_id[memb_tab_temp])
+
     # Cleanning size_table 
-    i = 0
     size_tab = size_tab[size_tab!=0]
     
     return memb_tab, size_tab
