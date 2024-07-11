@@ -50,13 +50,13 @@ class LinkageTree(object):
     """
     
     def __init__(self, linkage_matrix = None, path = None):
-        """ If path is not None, the percolation tree may be imported from a csv file
+        """ If path is not None, the percolation tree may be imported from a npy file
         """
         if path != None : 
-            if path[-4:] != ".csv":
+            if path[-4:] != ".npy":
                 raise AttributeError("The linkage tree is suppose to be generated from a csv file.")
             else:
-                self._linkage_matrix = np.loadtxt(path, delimiter=',')
+                self._linkage_matrix = np.load(path)
         else :
             self._linkage_matrix = linkage_matrix
 
@@ -211,14 +211,14 @@ class LinkageTree(object):
 
 
     def save(self, path):
-        """ Save the cluster in a csv file
+        """ Save the cluster in a npy file
         
         Parameters
         ----------
             path : path for location where to save the file
         """
-        if path[-4:] != ".csv":
-            raise AttributeError("The tree is supposed to be stored in a csv file.")
+        if path[-4:] != ".npy":
+            raise AttributeError("The tree is supposed to be stored in a npy file.")
         
-        np.savetxt(path, self._linkage_matrix, delimiter=",")
+        np.save(path)
         return 
