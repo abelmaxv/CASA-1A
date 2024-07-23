@@ -1,5 +1,3 @@
-# Template James Ives
-
 # Nom de notre workflow
 name: "Build and deploy Github pages"
 
@@ -46,7 +44,7 @@ jobs:
       # 3. Déploiement sur les Github Pages
 
       - name: "Deploy Github Pages"
-        uses: peaceiris/actions-gh-pages@v4
+        uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages     # <- Branche sur laquelle seront commités les fichiers
