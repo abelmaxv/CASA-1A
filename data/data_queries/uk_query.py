@@ -1,6 +1,7 @@
 import pandas as pd
 from IPython.display import display
 import networkx as nx
+from pyproj import Transformer
 
 raw_edge_path = "data/raw_data/uk_edges.tsv"
 raw_node_path = "data/raw_data/uk_nodes.csv"
@@ -47,6 +48,20 @@ display(edge_df)
 print("Relabelling nodes in node DataFrame... \n")
 node_df["node"] = node_df["node"].apply(lambda x : node_to_id[x] if x in node_set else None)
 node_df = node_df.dropna(subset=["node"]).astype({"node": int}) 
+display(node_df)
+
+
+# Changing coordinate system
+print("Changing coordinate system ... \n")
+
+source_crs = 'EPSG:27700'
+target_crs = 'EPSG:4326'
+transformer = Transformer.from_crs(source_crs, target_crs, always_xy=True)
+def convert_coords(x, y):
+    x0, y0 = transformer.transform(x, y)
+    return x0, y0
+node_df[['x_coord', 'y_coord']] = node_df.apply(lambda row: convert_coords(row['x_coord'], row['y_coord']), axis=1, result_type='expand')
+
 display(node_df)
 
 # Saving the DataFrames

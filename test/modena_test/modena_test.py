@@ -56,7 +56,6 @@ print("Displaying the percolation tree ... \n")
 tree_display_path = "test/modena_test/modena_percolation_tree.png"
 if not(path.isfile(tree_display_path)): 
     percolation_tree.plot(truncate_mode="level", p=10)
-    plt.title("Percolation tree of the modena model")
     plt.savefig(tree_display_path)
     plt.close()
 else :
@@ -127,7 +126,6 @@ if path.isfile(condensed_displayed_path):
     print(f"Condensed tree with min_size {min_size} had already been computed.")
 else : 
     condensed_tree.plot()
-    plt.title(f"Condensed tree of the modena model (min_size={min_size})")
     plt.savefig(condensed_displayed_path)
     plt.close()
 
@@ -163,7 +161,6 @@ if path.isfile(cluster_condensed_display_path):
     print(f"Condensed tree with clusters with min size {min_size} had already been computed.")
 else :
     condensed_tree.plot(select_clusters = True)
-    plt.title(f"Condensed tree with clusters of the modena model (min_size={min_size})")
     plt.savefig(cluster_condensed_display_path)
     plt.close()
 

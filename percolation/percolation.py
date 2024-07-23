@@ -65,6 +65,9 @@ class Percolation:
 
     @property 
     def linkage_tree(self):
+        """ 
+        .. :no-docs:
+        """
         if self._linkage_tree is None : 
             raise AttributeError("No percolation tree generated. Run self.percolate().")
         else : 
@@ -72,6 +75,9 @@ class Percolation:
 
     @property    
     def condensed_tree(self):
+        """
+        .. :no-docs:
+        """
         if self._condensed_tree is None: 
             raise AttributeError("No condensed tree generated. Run self.compute.condensed_tree().")
         else: 
@@ -91,12 +97,8 @@ class Percolation:
         
         Returns
         -------
-            self : the linkage tree is stored as a linkage matrix in the _linkage_tree attribute
+            self 
         
-        A linkage matrix is a np.ndarray A with 4 columns : 
-        - A[i,0] and A[i,1] are the names of the merged clusters at step i
-        - A[i,2] contains the length of the link that merged the two clusters
-        - A[i,3] contains the size of the new cluster
         """
         if data_type == "networkx":
             _checks_format_nx(G)
@@ -109,7 +111,16 @@ class Percolation:
 
 
     def compute_condensed_tree(self, min_size = 10):
-        """ TO DO
+        """ Computes the condensed tree with the runt prunning method
+
+        Parameters
+        ----------
+            min_size : parameter of the runt prunning method that corresponds the the minimum cluster size in 
+            the condensed tree
+        
+        Returns
+        ------
+            self 
         """
         if self._linkage_tree is None : 
             raise ValueError("Need to compute the linkage tree before extracting pruning tree. Run self.percolate().") 

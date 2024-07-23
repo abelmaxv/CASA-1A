@@ -108,7 +108,7 @@ print("\n \n \n")
 
 
 # Compute the condensed tree
-min_size = 903
+min_size = 900
 print(f"Handling the condensed tree with min_cluster_size {min_size} ... \n")
 condensed_tree_path = "data/data/condensed_trees/london/" + str(min_size) + "/"
 if path.exists(condensed_tree_path):
@@ -127,7 +127,6 @@ if path.isfile(condensed_displayed_path):
     print(f"Condensed tree with min_size {min_size} had already been computed.")
 else : 
     condensed_tree.plot()
-    plt.title(f"Condensed tree of the london model (min_size={min_size})")
     plt.savefig(condensed_displayed_path)
     plt.close()
 
@@ -163,7 +162,6 @@ if path.isfile(cluster_condensed_display_path):
     print(f"Condensed tree with clusters with min size {min_size} had already been computed.")
 else :
     condensed_tree.plot(select_clusters = True)
-    plt.title(f"Condensed tree with clusters of the london model (min_size={min_size})")
     plt.savefig(cluster_condensed_display_path)
     plt.close()
 

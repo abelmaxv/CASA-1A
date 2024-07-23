@@ -26,7 +26,6 @@ if not(path.isfile(network_display_path)):
     pos = nx.get_node_attributes(G, 'coords')
     nx.draw_networkx_nodes(G,pos, node_color='#6FCC9F', node_size=30)
     nx.draw_networkx_edges(G,pos, edge_color= "#B0B0B0", arrows=False)
-    plt.title("toybis model network")
     plt.axis("off")
     plt.savefig(network_display_path)
     plt.close()
@@ -56,7 +55,6 @@ print("Displaying the percolation tree ... \n")
 tree_display_path = "test/toybis_test/toybis_percolation_tree.png"
 if not(path.isfile(tree_display_path)): 
     percolation_tree.plot()
-    plt.title("Percolation tree of the toybis model")
     plt.savefig(tree_display_path)
     plt.close()
 else :
@@ -101,7 +99,6 @@ else :
     node_colors = clustering.get_node_colors()
     nx.draw_networkx_nodes(G,pos, node_color=node_colors, node_size=30)
     nx.draw_networkx_edges(G,pos, edge_color= "#B0B0B0", arrows=False)
-    plt.title(f"Clustering of the toybis model at threshold {threshold}")
     plt.axis("off")
     plt.savefig(cut_display_path)
     plt.close()
@@ -132,7 +129,6 @@ if path.isfile(condensed_displayed_path):
     print(f"Condensed tree with min_size {min_size} had already been computed.")
 else : 
     condensed_tree.plot()
-    plt.title(f"Condensed tree of the toybis model (min_size={min_size})")
     plt.savefig(condensed_displayed_path)
     plt.close()
 
@@ -168,7 +164,6 @@ if path.isfile(cluster_condensed_display_path):
     print(f"Condensed tree with clusters with min size {min_size} had already been computed.")
 else :
     condensed_tree.plot(select_clusters = True)
-    plt.title(f"Condensed tree with clusters of the toybis model (min_size={min_size})")
     plt.savefig(cluster_condensed_display_path)
     plt.close()
 
@@ -182,7 +177,6 @@ else :
     node_colors = clustering.get_node_colors()
     nx.draw_networkx_nodes(G,pos, node_color=node_colors, node_size=30)
     nx.draw_networkx_edges(G,pos, edge_color= "#B0B0B0", arrows=False)
-    plt.title(f"Stability clustering of the toybis model")
     plt.axis("off")
     plt.savefig(stability_display_path)
     plt.close()

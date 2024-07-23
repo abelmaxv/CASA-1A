@@ -108,7 +108,7 @@ print("\n \n \n")
 
 
 # Compute the condensed tree
-min_size = 20
+min_size = 5
 print(f"Handling the condensed tree with min_cluster_size {min_size} ... \n")
 condensed_tree_path = "data/data/condensed_trees/meudon/" + str(min_size) + "/"
 if path.exists(condensed_tree_path):
