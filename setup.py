@@ -26,7 +26,7 @@ extensions = [
 ]
 
 setup(
-    name = "intership_clusterer_project",
+    name = "Network HDBSCAN",
     #version = "O.O.10",
     description="A graph clustering algorithm inspired by HDBSCAN",
     #package_dir={"":},
