@@ -59,6 +59,8 @@ class CondensedTree(object):
 
     @property
     def raw_tree(self):
+        """ .. :no-docs:
+        """
         if self._raw_tree is None :
             raise AttributeError("Raw tree has not been initialised")
         else :
@@ -66,6 +68,8 @@ class CondensedTree(object):
 
     @property
     def clusters_stability(self):
+        """ .. :no-docs:
+        """
         if self._clusters_stability is None : 
             raise AttributeError("Clusters' stabliity was not computed yet. Run self.compute_stability.")
         else : 

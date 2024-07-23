@@ -96,6 +96,8 @@ class Clustering(object):
     
     @property
     def mem_tab(self):
+        """ .. :no-docs:
+        """
         if self._mem_tab is None: 
             raise AttributeError("Membership table was not initialised.")
         else : 
@@ -103,6 +105,8 @@ class Clustering(object):
         
     @property
     def cluster_colors(self):
+        """ .. :no-docs:
+        """
         if self._cluster_colors is None: 
             raise AttributeError("Cluster colors were not initialised. Run self.get_cluster_colors.")
         else : 
@@ -110,6 +114,8 @@ class Clustering(object):
         
     @property
     def size_tab(self):
+        """ .. :no-docs:
+        """
         if self._size_tab is None : 
             raise AttributeError("Size table was not initialised. Run self.get_size_tab.")
         else :

@@ -63,6 +63,8 @@ class LinkageTree(object):
 
     @property
     def linkage_matrix (self):
+        """ .. :no-docs:
+        """
         if self._linkage_matrix is None : 
             raise AttributeError("Linkage matrix was not initialised.")
         else:
