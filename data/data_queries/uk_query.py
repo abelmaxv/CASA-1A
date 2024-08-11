@@ -52,17 +52,17 @@ display(node_df)
 
 
 # Changing coordinate system
-print("Changing coordinate system ... \n")
+#print("Changing coordinate system ... \n")
 
-source_crs = 'EPSG:27700'
-target_crs = 'EPSG:4326'
-transformer = Transformer.from_crs(source_crs, target_crs, always_xy=True)
-def convert_coords(x, y):
-    x0, y0 = transformer.transform(x, y)
-    return x0, y0
-node_df[['x_coord', 'y_coord']] = node_df.apply(lambda row: convert_coords(row['x_coord'], row['y_coord']), axis=1, result_type='expand')
+#source_crs = 'EPSG:27700'
+##target_crs = 'EPSG:4326'
+#transformer = Transformer.from_crs(source_crs, target_crs, always_xy=True)
+#def convert_coords(x, y):
+#    x0, y0 = transformer.transform(x, y)
+#    return x0, y0
+#node_df[['x_coord', 'y_coord']] = node_df.apply(lambda row: convert_coords(row['x_coord'], row['y_coord']), axis=1, result_type='expand')
 
-display(node_df)
+#display(node_df)
 
 # Saving the DataFrames
 print("Saving the DataFrames ... \n")

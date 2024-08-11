@@ -42,15 +42,23 @@ print(f"Number of nodes to plot : {nodes.shape[0]} \n")
 print("Displaying the graph ... \n ")
 network_display_path = "test/uk_test/uk_network.png"
 if not(path.isfile(network_display_path)):
-    canvas = ds.Canvas(plot_width= 1000, plot_height=1000)
-    agg = canvas.points(nodes, "x_coord", "y_coord", agg = ds.any())
+    canvas = ds.Canvas(plot_width=1000, plot_height=1000)
+    agg = canvas.points(nodes, "x_coord", "y_coord", agg=ds.any())
     img = tf.shade(agg)
     img = np.array(img.to_pil())
-    plt.figure(figsize=(10, 10))
-    plt.imshow(img)
-    plt.axis("off")
-    plt.savefig(network_display_path, dpi=300, bbox_inches='tight', pad_inches=0) 
+
+    # Create a figure and axis with Matplotlib
+    fig, ax = plt.subplots(1, 1, figsize=(10, 10), facecolor='w', constrained_layout=True)
+    ax.imshow(img)
+    ax.axis('off')  # Turn off the axis
+    ax.set_aspect('equal')  # Set aspect ratio to 'equal'
+
+
+    # Save the figure
+    plt.tight_layout()
+    plt.savefig(network_display_path, dpi=300, bbox_inches='tight', pad_inches=0)
     plt.close()
+
 else: 
     print("Graph had already been plotted. \n")
 
