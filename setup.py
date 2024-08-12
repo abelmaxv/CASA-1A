@@ -9,25 +9,25 @@ with open("README.md", "r") as f:
 
 
 extensions = [
-    Extension("src._graph",["src/_graph.pyx"], 
+    Extension("NetHDBSCAN.structures._graph",["NetHDBSCAN/structures/_graph"], 
               include_dirs=[numpy_path]),
 
-    Extension("src._union_find", ["src/_union_find.pyx"],
+    Extension("NetHDBSCAN.structures._union_find", ["NetHDBSCAN/structures/_union_find.pyx"],
               include_dirs=[numpy_path]),
 
-    Extension("src._tree", ["src/_tree.pyx"],
+    Extension("NetHDBSCAN.structures._tree", ["NetHDBSCAN/structures/_tree.pyx"],
               include_dirs=[numpy_path], 
-              depends=["src/_union_find.pyx"]),
+              depends=["NetHDBSCAN/structures/_union_find.pyx"]),
 
-    Extension("percolation._percolation", ["percolation/_percolation.pyx"],
+    Extension("NetHDBSCAN.percolation._percolation", ["NetHDBSCAN/percolation/_percolation.pyx"],
               include_dirs=[numpy_path],
-              depends= ["src/_union_find.pyx", "src/_tree.pyx", "src/_graph.pyx"])
+              depends= ["NetHDBSCAN/structures/_union_find.pyx", "NetHDBSCAN/structures/_tree.pyx", "NetHDBSCAN/structures/_graph.pyx"])
 
 ]
 
 setup(
     name = "NetHDBSCAN",
-    version = "O.1.0",
+    version = "0.0.1",
     description="A graph clustering algorithm inspired by HDBSCAN",
     #package_dir={"":},
     long_description = long_description,
