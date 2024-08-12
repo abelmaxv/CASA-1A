@@ -9,7 +9,7 @@ with open("README.md", "r") as f:
 
 
 extensions = [
-    Extension("NetHDBSCAN.structures._graph",["NetHDBSCAN/structures/_graph"], 
+    Extension("NetHDBSCAN.structures._graph",["NetHDBSCAN/structures/_graph.pyx"], 
               include_dirs=[numpy_path]),
 
     Extension("NetHDBSCAN.structures._union_find", ["NetHDBSCAN/structures/_union_find.pyx"],
