@@ -2,9 +2,9 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 from ._percolation import percolate_network
-from src._tree import _condensed_tree
-from src.linkage_tree import LinkageTree
-from src.condensed_tree import CondensedTree
+from NetHDBSCAN.structures._tree import _condensed_tree
+from NetHDBSCAN.structures.linkage_tree import LinkageTree
+from NetHDBSCAN.structures.condensed_tree import CondensedTree
 
 def _checks_format_nx(G):
     """ Checks if the graph given as the right format for the library : 
