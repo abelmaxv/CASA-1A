@@ -1,9 +1,9 @@
 import numpy as np
 cimport numpy as np
 
-from src._union_find cimport UnionFind
-from src._graph cimport edge_t, transform_graph_nx, transform_graph_pd
-from src._graph import edge_dtype
+from NetHDBSCAN.structures._union_find cimport UnionFind
+from NetHDBSCAN.structures._graph cimport edge_t, transform_graph_nx, transform_graph_pd
+from NetHDBSCAN.structures._graph import edge_dtype
 
 from tqdm import tqdm
 

@@ -1,7 +1,7 @@
 cimport numpy as np
 
-from src._union_find cimport UnionFind
-from src._graph cimport edge_t
+from NetHDBSCAN.structures._union_find cimport UnionFind
+from NetHDBSCAN.structures._graph cimport edge_t
 
 
 cdef np.ndarray[dtype = double, ndim=2] clean_linkage_matrix(np.ndarray[dtype = double, ndim=2] linkage_matrix)
