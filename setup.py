@@ -26,8 +26,8 @@ extensions = [
 ]
 
 setup(
-    name = "Network HDBSCAN",
-    #version = "O.O.10",
+    name = "NetHDBSCAN",
+    version = "O.1.0",
     description="A graph clustering algorithm inspired by HDBSCAN",
     #package_dir={"":},
     long_description = long_description,
