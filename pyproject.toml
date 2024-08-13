@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "Cython", "numpy"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "NetHDBSCAN"
+version = "0.0.1"
+authors = [
+  { name="Abel Verley", email="abel.verley@ens-paris-saclay.fr" },
+]
+license = {text = "MIT"}
+description = "A graph clustering algorithm inspired by HDBSCAN"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/abelmaxv/CASA-1A"
+
+
+[project.optional-dependencies]
+dev = ["Cython"]
+
+[tool.setuptools]
+packages = ["NetHDBSCAN", "NetHDBSCAN.percolation", "NetHDBSCAN.structures"]

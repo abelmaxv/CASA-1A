@@ -26,15 +26,5 @@ extensions = [
 ]
 
 setup(
-    name = "NetHDBSCAN",
-    version = "0.0.1",
-    description="A graph clustering algorithm inspired by HDBSCAN",
-    #package_dir={"":},
-    long_description = long_description,
-    long_description_content_type="text/markdown",
-    url = "https://github.com/abelmaxv/CASA-1A",
-    author = "Abel Verley",
-    author_email = "abel.verley@ens-paris-saclay.fr",
-    #install_requires = [],
     ext_modules = cythonize(extensions)
 ) 
