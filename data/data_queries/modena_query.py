@@ -1,6 +1,5 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-from percolation.percolation import Percolation
 import osmnx as ox
 
 # The modena model is Modena street network
