@@ -27,7 +27,7 @@ from NetHDBSCAN.structures import Clustering, CondensedTree, LinkageTree
 The algorithm can operate on a [networkx](https://networkx.org/documentation/stable/index.html) graph structure or a [pandas](https://pandas.pydata.org/) data frame that contains edge list. 
 
 >[!IMPORTANT]
->It is important to format the network so that it is undirected and vertices are labeled 0, ..., n-1 where n-1 is ther number of vertices. 
+>It is important to format the network so that it is undirected and vertices are labeled 0, ..., n-1 where n is ther number of vertices. 
 
 Although a complete [documentation]() is available, the next section provides a basic use case of the algorithm.
 
