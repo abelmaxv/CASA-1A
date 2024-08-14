@@ -1,10 +1,8 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from os import path, makedirs
-from percolation.percolation import Percolation
-from src.linkage_tree import LinkageTree
-from src.cluster import Clustering
-from src.condensed_tree import CondensedTree
+from NetHDBSCAN.percolation import Percolation
+from NetHDBSCAN.structures import Clustering, CondensedTree, LinkageTree
 
 # Importing the toybis model
 print("Importing the network ... \n")

@@ -1,10 +1,8 @@
 import matplotlib.pyplot as plt
 from os import path, makedirs
 import pandas as pd
-from percolation.percolation import Percolation
-from src.linkage_tree import LinkageTree
-from src.cluster import Clustering
-from src.condensed_tree import CondensedTree
+from NetHDBSCAN.percolation import Percolation
+from NetHDBSCAN.structures import Clustering, CondensedTree, LinkageTree
 from IPython.display import display
 
 
