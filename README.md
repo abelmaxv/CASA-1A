@@ -29,7 +29,7 @@ The algorithm can operate on a [networkx](https://networkx.org/documentation/sta
 >[!IMPORTANT]
 >It is important to format the network so that it is undirected and vertices are labeled 0, ..., n-1 where n is ther number of vertices. 
 
-Although a complete [documentation]() is available, the next section provides a basic use case of the algorithm.
+Although a complete documentation (soon) is available, the next section provides a basic use case of the algorithm.
 
 ## Basic Example
 
