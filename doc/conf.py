@@ -8,7 +8,7 @@
 from sphinx.ext import autodoc
 
 
-project = 'Network HDBSCAN'
+project = 'NetHDBSCAN'
 copyright = '2024, Abel Verley'
 author = 'Abel Verley'
 
