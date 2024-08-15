@@ -1,7 +1,7 @@
 Percolation 
 ===========
 
-.. automodule:: percolation.percolation
+.. automodule:: NetHDBSCAN.percolation.percolation
     :members:
     :undoc-members:
     :show-inheritance:

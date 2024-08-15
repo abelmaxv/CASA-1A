@@ -1,7 +1,7 @@
 Cluster
 ===========
 
-.. automodule:: src.cluster
+.. automodule:: NetHDBSCAN.structures.cluster
     :members:
     :undoc-members:
     :show-inheritance:

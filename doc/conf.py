@@ -25,7 +25,7 @@ autodoc_default_options = {
 extensions = [
     'sphinx.ext.githubpages',
     'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
 ]
 
 templates_path = ['_templates']

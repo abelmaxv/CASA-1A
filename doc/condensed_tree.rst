@@ -1,7 +1,7 @@
 Condensed Tree
 ==============
 
-.. automodule:: src.condensed_tree
+.. automodule:: NetHDBSCAN.structures.condensed_tree
     :members:
     :undoc-members:
     :show-inheritance:

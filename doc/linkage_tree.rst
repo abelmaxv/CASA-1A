@@ -1,7 +1,7 @@
 Linkage Tree
 ============
 
-.. automodule:: src.linkage_tree
+.. automodule:: NetHDBSCAN.structures.linkage_tree
     :members:
     :undoc-members:
     :show-inheritance:
